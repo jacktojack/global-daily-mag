@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>全球重要动态 · 2026-09-04 早间版（翻页杂志）</title>
+<style>
+  :root{
+    --paper:#f6f1e6;
+    --ink:#211d18;
+    --muted:#7a6f60;
+    --red:#9e1b1b;
+    --rule:#2a2620;
+    --box:#ebe0c8;
+    --boxline:#d8c9a9;
+    --dark1:#1b2330;
+    --dark2:#0e131d;
+    --gold:#c8a24a;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:radial-gradient(1200px 700px at 50% -10%, #34302a 0%, #211e19 55%, #16140f 100%);
+    font-family:"Noto Serif SC","Source Han Serif SC","Songti SC","SimSun",Georgia,serif;
+    color:var(--ink);
+    line-height:1.75;
+    -webkit-font-smoothing:antialiased;
+  }
+  .stage{
+    min-height:100vh;
+    display:flex;flex-direction:column;align-items:center;
+    padding:26px 12px 96px;
+  }
+  .hint{
+    color:#cfc4ad;font-size:13px;letter-spacing:.08em;margin:0 0 18px;opacity:.8;
+  }
+  .scaleWrap{transform-origin:top center;}
+  .book{
+    position:relative;width:940px;height:700px;
+    perspective:2600px;transform-style:preserve-3d;
+    filter:drop-shadow(0 24px 50px rgba(0,0,0,.55));
+  }
+  .leaf{
+    position:absolute;top:0;left:470px;width:470px;height:700px;
+    transform-origin:left center;transform-style:preserve-3d;
+    transform:rotateY(0deg);
+    transition:transform .9s cubic-bezier(.55,.08,.2,1);
+  }
+  .face{
+    position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;
+    border:1px solid #cabd9f;overflow:hidden;
+    display:flex;flex-direction:column;
+  }
+  .front{transform:rotateY(0deg);background:var(--paper);}
+  .back{transform:rotateY(180deg);background:var(--paper);}
+  .pad{padding:30px 28px;flex:1;display:flex;flex-direction:column;}
+
+  .folio{font-size:11px;letter-spacing:.22em;color:var(--muted);text-transform:uppercase;
+    border-bottom:1px solid var(--boxline);padding-bottom:7px;margin-bottom:14px;}
+
+  /* 新闻页 */
+  .news-no{font-size:44px;font-weight:700;color:var(--red);line-height:.85;font-variant-numeric:tabular-nums;}
+  .news-t{font-size:21px;font-weight:700;line-height:1.35;margin:10px 0 14px;}
+  .news-b{font-size:14.5px;line-height:1.85;text-align:justify;margin:0 0 14px;flex:1;}
+  .watch{background:var(--box);border-left:4px solid var(--red);padding:9px 12px;font-size:13px;line-height:1.7;margin:0 0 10px;}
+  .watch b{color:var(--red);margin-right:3px;}
+  .src{font-size:12px;color:var(--muted);line-height:1.6;}
+  .src a{color:#3a5e8c;text-decoration:none;border-bottom:1px dotted #3a5e8c;word-break:break-all;}
+  .src a:hover{color:var(--red);}
+  .pageno{text-align:center;font-size:11px;color:var(--muted);letter-spacing:.35em;margin-top:10px;}
+
+  /* 卷首 / 目录 / 封底 */
+  .sec-h{font-size:25px;font-weight:700;margin:4px 0 16px;border-bottom:2px solid var(--rule);padding-bottom:9px;}
+  .lead-p{font-size:15px;line-height:1.95;text-align:justify;margin:0 0 14px;}
+  .lead-note{font-size:13.5px;line-height:1.9;color:#3a342b;background:var(--box);padding:12px 14px;border-left:4px solid var(--red);}
+  .toc{columns:2;column-gap:22px;font-size:11.5px;line-height:1.35;padding-left:18px;margin:0;}
+  .toc li{margin-bottom:5px;break-inside:avoid;}
+  .toc li::marker{color:var(--red);font-weight:700;font-variant-numeric:tabular-nums;}
+  .toc li span{display:none;}
+  .contents-pad{padding:18px 22px 32px;}
+  .contents-pad .folio{margin-bottom:6px;}
+  .contents-pad .sec-h{margin:0 0 6px;padding-bottom:6px;}
+  .contents-pad .pageno{margin-top:2px;}
+  .disc{color:var(--red);font-weight:700;}
+  .end-box{border:1px solid var(--boxline);padding:14px;font-size:13px;line-height:1.85;background:var(--box);}
+
+  /* 封面 */
+  .cover{
+    background:
+      radial-gradient(700px 500px at 50% 18%, rgba(60,80,120,.35), transparent 60%),
+      linear-gradient(160deg,#202a3b 0%, #131a26 55%, #0c111a 100%);
+    color:#f1e9d6;border-color:#3a455c;
+  }
+  .cover-in{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:34px;}
+  .cover-top{font-size:12px;letter-spacing:.5em;color:var(--gold);text-transform:uppercase;margin-bottom:26px;}
+  .cover-title{font-size:62px;font-weight:700;letter-spacing:.14em;line-height:1.15;margin:0;
+    text-shadow:0 2px 18px rgba(200,162,74,.35);}
+  .cover-rule{width:120px;height:2px;background:var(--gold);margin:26px 0 20px;opacity:.8;}
+  .cover-sub{font-size:15px;letter-spacing:.32em;color:#d9cfb6;}
+  .cover-foot{position:absolute;bottom:30px;left:0;right:0;text-align:center;
+    font-size:12px;letter-spacing:.18em;color:#b8ad94;}
+
+  /* 封底 */
+  .back-cover{
+    background:linear-gradient(160deg,#202a3b 0%, #131a26 100%);
+    color:#f1e9d6;border-color:#3a455c;
+  }
+  .back-cover .pad{align-items:center;justify-content:center;text-align:center;}
+  .back-cover .end-big{font-size:40px;font-weight:700;letter-spacing:.2em;color:#f1e9d6;margin:0 0 18px;}
+  .back-cover .end-sub{font-size:13px;letter-spacing:.18em;color:#b8ad94;line-height:2;}
+
+  /* 导航（透明浮层，不遮挡正文） */
+  .nav{position:fixed;bottom:0;left:0;right:0;height:62px;background:rgba(18,16,13,.48);
+    display:flex;align-items:center;justify-content:center;gap:22px;z-index:60;
+    border-top:1px solid rgba(200,162,74,.18);backdrop-filter:blur(8px);pointer-events:none;}
+  .nav button{pointer-events:auto;background:transparent;border:1px solid rgba(200,162,74,.55);color:#e8e0cf;
+    font-size:22px;width:46px;height:38px;border-radius:8px;cursor:pointer;
+    font-family:inherit;transition:.2s;display:flex;align-items:center;justify-content:center;}
+  .nav button:hover{background:rgba(200,162,74,.25);border-color:var(--gold);}
+  .nav button:disabled{opacity:.35;cursor:default;}
+  .nav .pg{color:#f5efe3;font-size:14px;letter-spacing:.12em;min-width:96px;text-align:center;
+    text-shadow:0 1px 4px rgba(0,0,0,.55);}
+
+  @media (max-width:760px){
+    .hint{
+      position:fixed;top:0;left:0;right:0;z-index:70;
+      font-size:12px;margin:0;padding:10px 14px;
+      background:rgba(18,16,13,.60);color:#cfc4ad;
+      text-align:center;letter-spacing:.04em;
+      backdrop-filter:blur(6px);border-bottom:1px solid rgba(200,162,74,.2);
+    }
+    .stage{
+      position:fixed;inset:0;padding:0;display:block;overflow:hidden;
+      background:radial-gradient(1200px 700px at 50% -10%, #34302a 0%, #211e19 55%, #16140f 100%);
+    }
+    .scaleWrap{transform:none !important;width:100vw;height:100vh;}
+    .book{
+      position:absolute;inset:0;width:100vw;height:100vh;
+      perspective:none;transform-style:flat;filter:none;
+    }
+    .leaf{
+      position:absolute;inset:0;width:100vw;height:100vh;left:0 !important;
+      opacity:0;pointer-events:none;z-index:0;
+      transform:none !important;transition:opacity .35s ease;
+    }
+    .leaf.mobile-active{opacity:1;pointer-events:auto;z-index:10;}
+    .leaf .face{display:none !important;position:absolute;inset:0;width:100%;height:100%;
+      transform:none !important;backface-visibility:visible;border:none;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+    .leaf.show-front .front{display:flex !important;}
+    .leaf.show-back .back{display:flex !important;}
+    .pad{padding:64px 22px 150px;}
+
+    .cover-in{padding:70px 26px 26px;}
+    .cover-top{font-size:13px;margin-bottom:22px;}
+    .cover-title{font-size:52px;}
+    .cover-sub{font-size:16px;letter-spacing:.22em;}
+    .cover-foot{bottom:110px;font-size:13px;}
+
+    .sec-h{font-size:28px;}
+    .lead-p{font-size:17px;line-height:2;}
+    .lead-note{font-size:15px;}
+    .toc{columns:2;column-gap:14px;padding-left:16px;font-size:11.5px;line-height:1.25;}
+    .toc li{margin-bottom:4px;break-inside:avoid;}
+    .toc li::marker{font-size:11.5px;}
+    .contents-pad{padding:64px 16px 170px;}
+    .contents-pad .folio{margin-bottom:4px;}
+    .contents-pad .sec-h{font-size:22px;margin:0 0 8px;padding-bottom:6px;}
+    .contents-pad .pageno{margin-top:auto;padding-top:10px;}
+
+    .news-no{font-size:58px;}
+    .news-t{font-size:25px;line-height:1.4;margin:12px 0 16px;}
+    .news-b{font-size:16px;line-height:2;}
+    .watch{font-size:14.5px;line-height:1.85;padding:12px 14px;}
+    .src{font-size:13px;line-height:1.75;}
+
+    .back-cover .end-big{font-size:48px;}
+    .back-cover .end-sub{font-size:15px;line-height:2.2;}
+
+    .nav{height:58px;gap:18px;}
+    .nav button{width:50px;height:40px;font-size:24px;}
+    .nav .pg{font-size:14px;min-width:76px;}
+  }
+</style>
+</head>
+<body>
+<div class="stage">
+  <p class="hint" id="hint">📖 点击书页左右两侧 或 使用键盘 ← → 翻页</p>
+  <div class="scaleWrap" id="scaleWrap">
+    <div class="book" id="book">
+
+      <!-- ===== leaf 0：封面 / 卷首语 ===== -->
+      <div class="leaf">
+        <div class="face front cover">
+          <div class="cover-in">
+            <div class="cover-top">Global Daily Brief</div>
+            <h1 class="cover-title">全球<br>重要动态</h1>
+            <div class="cover-rule"></div>
+            <div class="cover-sub">一日廿事 · 纯新闻叙述</div>
+            <div class="cover-foot">2026 年 9 月 4 日　星期五 · 早间版</div>
+          </div>
+        </div>
+        <div class="face back">
+          <div class="pad">
+            <div class="folio">卷首语 · Foreword</div>
+            <h2 class="sec-h">致读者</h2>
+            <p class="lead-p">一觉醒来，世界又发生了哪些大事？本期为您精选 <b>20 条</b> 值得关注的全球动态，覆盖灾害救援、地缘博弈、AI 算力、航天探索、产业政策和民生医疗。</p>
+            <p class="lead-p">我们坚持<b>纯新闻叙事</b>——只呈现事实与新闻价值，把研究分析留给您自己。翻动书页，用十分钟把握昨夜今晨的世界。</p>
+            <div class="lead-note">本期聚焦：海峡死结、AI狂飙、黄金搬家——今日世界的三条暗线</div>
+            <div class="pageno">— 卷首 —</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== leaf 1：目录 / 新闻01 ===== -->
+      <div class="leaf">
+        <div class="face front">
+          <div class="pad contents-pad">
+            <div class="folio">目录 · Contents</div>
+            <h2 class="sec-h">本期目录</h2>
+            <ol class="toc">
+              <li>87艘商船改道：美伊封锁把霍尔木兹海峡拧成死结</li>
+              <li>自己人打自己人？以防长放话：若遭伊朗袭击，以将夷平其所有基础设施</li>
+              <li>1290人遇难：尼泊尔泥石流成南亚近年最惨重灾害之一</li>
+              <li>GPT-6 Astra 登场：OpenAI 宣称进入 AGI 时代，单任务成本砍掉近六成</li>
+              <li>129亿美元一掷：英伟达吞下 Hugging Face，开源 AI 版图易主</li>
+              <li>不到两周造出芯片：全球首款 AI 设计、AI 验证的加速器 Redwood 跑通</li>
+              <li>三大 AI 集体罢工：ChatGPT、Claude、Grok 宕机近 4 小时</li>
+              <li>AI 营收暴增 221%：博通定制芯片翻身，客户座次大洗牌</li>
+              <li>铜线不够用了：三星、台积电押注硅光子，半导体市场奔向 2 万亿</li>
+              <li>小巨人冲 2.2 万家：中小企业十五五规划出炉，设国家级发展基金二期</li>
+              <li>机器人做手术也能报销了：医保 DRG/DIP 3.0 首设单独分组</li>
+              <li>深山里的生命线：西藏吉隆口岸核心区临时供电抢通</li>
+              <li>撤展抗议：中方团队就光州双年展涉台错误宣布退出</li>
+              <li>超强厄尔尼诺来袭：极端天气风险或延续至 2027 年</li>
+              <li>罗曼望远镜升空：NASA 派它去绘制宇宙暗物质地图</li>
+              <li>复发风险降 50%：全球首款 III 期阳性 mRNA 癌症疫苗出炉</li>
+              <li>流感疫苗也用 mRNA：GSK 将启动首个双抗原靶向 III 期</li>
+              <li>86 吨黄金搬家：荷兰从美加运回，美元信任现裂痕</li>
+              <li>终极加息？欧洲央行 9 月 10 日或再升 25 基点至 2.50%</li>
+              <li>沃勒放鸽、黄金破 4500：美联储一开口，市场全线翻红</li>
+            </ol>
+            <div class="pageno">— 目录 —</div>
+          </div>
+        </div>
+        <div class="face back">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">01</div>
+            <h2 class="news-t">87艘商船改道：美伊封锁把霍尔木兹海峡拧成死结</h2>
+            <p class="news-b">美军中央司令部 9 月 3 日通报，对伊朗的海上封锁已迫使 87 艘商船更改航线，另有 3 艘丧失航行能力、2 艘被登临检查。伊朗议会方面同日重申，未经德黑兰同意，霍尔木兹海峡不会开放。双方围绕这条能源大动脉的控制权角力持续升温。</p>
+            <div class="watch"><b>观此：</b>霍尔木兹海峡承载全球约五分之一的石油海运，是海湾国家对外输油的咽喉。一旦通行长期受限，国际油价与航运保险费率都会受到直接冲击，欧洲和亚洲的能源进口国首当其冲。这场封锁本质上是把海上通道变成谈判筹码，背后是美伊之间围绕制裁与地区影响力的拉锯。</div>
+            <p class="src">来源：央视新闻（<a href="https://www.toutiao.com/article/7681439262885134848/" target="_blank">toutiao.com</a>）</p>
+            <div class="pageno">— 01 —</div>
+          </div>
+        </div>
+      </div>
+      <!-- ===== leaf 2：新闻02 / 新闻03 ===== -->
+      <div class="leaf">
+        <div class="face front">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">02</div>
+            <h2 class="news-t">自己人打自己人？以防长放话：若遭伊朗袭击，以将夷平其所有基础设施</h2>
+            <p class="news-b">以色列国防部长卡茨 9 月 3 日称，如果伊朗对以色列发动袭击，以方将打击伊朗境内全部基础设施，包括能源设施。与此同时，伊朗方面表示已通过第三方向美方传递警告，反对以色列对黎巴嫩南部山脊发动全面进攻。</p>
+            <div class="watch"><b>观此：</b>这番表态把地区冲突的当量又往上推了一档，从代理人摩擦转向对主权国家关键设施的威慑。能源基础设施一旦成为目标，不仅影响伊朗民生，也会牵动全球油气供应预期。中东这盘棋正从边缘冲突向系统性对抗滑行，风险外溢的边界越来越模糊。</div>
+            <p class="src">来源：央视新闻（<a href="https://cbgc.scol.com.cn/news/7919242" target="_blank">cbgc.scol.com.cn</a>）</p>
+            <div class="pageno">— 02 —</div>
+          </div>
+        </div>
+        <div class="face back">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">03</div>
+            <h2 class="news-t">1290人遇难：尼泊尔泥石流成南亚近年最惨重灾害之一</h2>
+            <p class="news-b">截至 9 月 3 日，尼泊尔泥石流灾害遇难人数已升至 1290 人，另有数千人失联。持续的强降雨在山区间引发连锁滑坡，道路、桥梁与村庄被掩埋，救援力量仍在受灾最严重的区域展开搜救。</p>
+            <div class="watch"><b>观此：</b>这场灾难揭示了喜马拉雅南麓在气候变暖背景下的脆弱性——极端降雨叠加陡坡地形，使山体失稳风险显著上升。对尼泊尔这样的山地国家，灾后重建与防灾体系建设是一道长期考题，也提醒整个南亚需重新审视气候适应性基础设施的投入。</div>
+            <p class="src">来源：央视新闻（<a href="https://www.toutiao.com/article/7681439262885134848/" target="_blank">toutiao.com</a>）</p>
+            <div class="pageno">— 03 —</div>
+          </div>
+        </div>
+      </div>
+      <!-- ===== leaf 3：新闻04 / 新闻05 ===== -->
+      <div class="leaf">
+        <div class="face front">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">04</div>
+            <h2 class="news-t">GPT-6 Astra 登场：OpenAI 宣称进入 AGI 时代，单任务成本砍掉近六成</h2>
+            <p class="news-b">OpenAI 于 9 月 3 日发布新一代旗舰模型 GPT-6 Astra，称其在编程、电脑与浏览器操作任务中表现突出，单任务成本较上一代降低 57%、耗时减少 47%。公司同时表示，模型的网络安全能力首次达到关键级别。</p>
+            <div class="watch"><b>观此：</b>从会聊天到能操作电脑，大模型的能力边界正在快速外扩，这意味着 AI 开始真正介入数字劳动的环节。但越强的能力也越需要护栏，OpenAI 对最强功能的保留开放，折射出行业在安全与开放之间的谨慎权衡。</div>
+            <p class="src">来源：腾讯新闻（<a href="https://new.qq.com/rain/a/20260904A02LOD00?refer=cp_1009" target="_blank">new.qq.com</a>）</p>
+            <div class="pageno">— 04 —</div>
+          </div>
+        </div>
+        <div class="face back">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">05</div>
+            <h2 class="news-t">129亿美元一掷：英伟达吞下 Hugging Face，开源 AI 版图易主</h2>
+            <p class="news-b">英伟达 9 月 3 日宣布以 129.3 亿美元收购 AI 开源平台 Hugging Face，这是其迄今最大单笔收购。黄仁勋表示将维持平台开放，允许用户自由上传下载模型，不强制使用英伟达硬件。</p>
+            <div class="watch"><b>观此：</b>这笔交易把卖铲子的人和矿工集市捏到了一起——英伟达本就掌握算力，如今又握住开源模型的分发入口。对中小开发者而言，平台是否真能保持中立开放，将是未来几年观察的重点。AI 产业的权力正在向少数软硬件一体化的巨头收拢。</div>
+            <p class="src">来源：华尔街见闻（<a href="https://www.163.com/dy/article/L5VCFLF905198NMR.html" target="_blank">163.com</a>）</p>
+            <div class="pageno">— 05 —</div>
+          </div>
+        </div>
+      </div>
+      <!-- ===== leaf 4：新闻06 / 新闻07 ===== -->
+      <div class="leaf">
+        <div class="face front">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">06</div>
+            <h2 class="news-t">不到两周造出芯片：全球首款 AI 设计、AI 验证的加速器 Redwood 跑通</h2>
+            <p class="news-b">美国定制芯片公司 Architect Labs 发布 Redwood——一款由 AI 系统端到端设计、验证并部署的 AI 推理加速器。两名架构师只给出高层规格，AI 在不到两周内完成了性能模型、代码、验证环境与固件开发，并已在 FPGA 上运行 Llama、Qwen 等大模型。</p>
+            <div class="watch"><b>观此：</b>传统芯片设计动辄数年、耗资数亿美元，Redwood 把周期压缩到两周量级，意味着硬件开发可能迎来软件化拐点。它面向机器人等需要即时反应的物理 AI 场景，若验证可靠，将重塑从架构到流片的协作方式，也加剧对高端芯片人才短缺的替代想象。</div>
+            <p class="src">来源：半导体行业观察（<a href="https://www.163.com/dy/article/L5R82KR705566LTA.html" target="_blank">163.com</a>）</p>
+            <div class="pageno">— 06 —</div>
+          </div>
+        </div>
+        <div class="face back">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">07</div>
+            <h2 class="news-t">三大 AI 集体罢工：ChatGPT、Claude、Grok 宕机近 4 小时</h2>
+            <p class="news-b">美国时间 9 月 3 日早间，OpenAI、Anthropic 与 xAI 旗下模型同时出现服务中断，数万名用户通过故障追踪平台报告问题，谷歌 Gemini、微软 Copilot 也收到大量中断反馈。有分析指可能与底层网络设施 Cloudflare 异常有关。</p>
+            <div class="watch"><b>观此：</b>当办公、写作、编程越来越依赖少数几家 AI 服务，一次集体宕机就暴露了数字基础设施的单点脆弱。这不仅是技术问题，更是提醒企业与个人：把关键流程押注在单一云服务上，需要准备兜底方案。AI 越普及，系统的韧性越该被重视。</div>
+            <p class="src">来源：腾讯新闻（<a href="https://new.qq.com/rain/a/20260904A02LOD00?refer=cp_1009" target="_blank">new.qq.com</a>）</p>
+            <div class="pageno">— 07 —</div>
+          </div>
+        </div>
+      </div>
+      <!-- ===== leaf 5：新闻08 / 新闻09 ===== -->
+      <div class="leaf">
+        <div class="face front">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">08</div>
+            <h2 class="news-t">AI 营收暴增 221%：博通定制芯片翻身，客户座次大洗牌</h2>
+            <p class="news-b">博通 2026 财年第三季度 AI 半导体营收达 167 亿美元，同比增长 221%。公司预计，Anthropic 与 OpenAI 将超越谷歌，成为其 AI 专用芯片的前两大客户，并给出 2028 财年 AI 收入翻至 2300 亿美元的指引。</p>
+            <div class="watch"><b>观此：</b>博通的业绩曲线是 AI 基建狂潮的缩影——算力需求不再只由几家巨头内部消化，而是外溢到一批造模型的公司自建房。定制芯片正在分流英伟达 GPU 的蛋糕，云厂商与模型公司的供应链正在悄悄多元化。</div>
+            <p class="src">来源：环球网（<a href="https://www.toutiao.com/article/7681196693764817459/" target="_blank">toutiao.com</a>）</p>
+            <div class="pageno">— 08 —</div>
+          </div>
+        </div>
+        <div class="face back">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">09</div>
+            <h2 class="news-t">铜线不够用了：三星、台积电押注硅光子，半导体市场奔向 2 万亿</h2>
+            <p class="news-b">在 Semicon Taiwan 2026 上，三星发布 CUBE 三维堆叠存储战略，台积电则力推硅光子封装平台。行业判断，AI 数据中心的数据搬运已占系统活动的近六成，成为比单芯片性能更大的瓶颈，全球半导体市场有望在 2030 年突破 2 万亿美元。</p>
+            <div class="watch"><b>观此：</b>AI 竞赛的主战场正从算得快转向传得快——当数据在芯片间来回搬运吃掉六成系统开销，光互连就成了必答题。硅光子与三维堆叠代表芯片业从平面走向立体的范式转移，也将决定下一轮算力基建的赢家归属。</div>
+            <p class="src">来源：Korea JoongAng Daily（<a href="https://www.koreajoongangdaily.com/business/ai-data-bottleneck-drives-race-to-reinvent-chips/12855049" target="_blank">koreajoongangdaily.com</a>）</p>
+            <div class="pageno">— 09 —</div>
+          </div>
+        </div>
+      </div>
+      <!-- ===== leaf 6：新闻10 / 新闻11 ===== -->
+      <div class="leaf">
+        <div class="face front">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">10</div>
+            <h2 class="news-t">小巨人冲 2.2 万家：中小企业十五五规划出炉，设国家级发展基金二期</h2>
+            <p class="news-b">工信部等 10 部门印发《促进中小企业发展十五五规划》，提出到 2030 年规上中小企业人均营业收入累计增长 15% 左右，专精特新小巨人企业达 2.2 万家，并设立国家中小企业发展基金二期，引导资本投早、投小、投硬科技。</p>
+            <div class="watch"><b>观此：</b>中小企业是创新的毛细血管，也是就业的蓄水池。这份规划把专精特新上升到国家战略层级，意味着政策资源会向硬科技与产业链关键环节倾斜。对广大民营制造企业而言，融资便利与账款清理长效机制是其中最实在的利好。</div>
+            <p class="src">来源：新华社（<a href="https://news.gmw.cn/2026-09/04/content_38984025.htm" target="_blank">news.gmw.cn</a>）</p>
+            <div class="pageno">— 10 —</div>
+          </div>
+        </div>
+        <div class="face back">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">11</div>
+            <h2 class="news-t">机器人做手术也能报销了：医保 DRG/DIP 3.0 首设单独分组</h2>
+            <p class="news-b">国家医保局发布按病组和病种分值付费 3.0 版方案，亮点之一是为机器人辅助手术单独设立支付分组。这意味着此类手术不再与传统术式共用支付标准，医院采用先进技术的顾虑有望降低。</p>
+            <div class="watch"><b>观此：</b>把机器人手术单列为支付单元，等于在医保层面承认了技术有价。这既能鼓励医院引入精准微创手段，也可能推动国产手术机器人加速落地。医疗支付的每一次分组微调，背后都是创新技术走向普及的关键一步。</div>
+            <p class="src">来源：腾讯新闻（<a href="https://so.html5.qq.com/page/real/search_news?docid=70000021_7826a99f7b106352" target="_blank">so.html5.qq.com</a>）</p>
+            <div class="pageno">— 11 —</div>
+          </div>
+        </div>
+      </div>
+      <!-- ===== leaf 7：新闻12 / 新闻13 ===== -->
+      <div class="leaf">
+        <div class="face front">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">12</div>
+            <h2 class="news-t">深山里的生命线：西藏吉隆口岸核心区临时供电抢通</h2>
+            <p class="news-b">国家电网 9 月 3 日晚通报，西藏日喀则市吉隆口岸核心区域的临时供电线路已全部抢通，全力保障抢险救援用电。通往吉隆口岸的 216 国道实现畅通，深层次搜救仍在进行。</p>
+            <div class="watch"><b>观此：</b>口岸是边贸与人员往来的枢纽，断电意味着救援指挥、通信与照明全部受限。临时供电抢通为后续搜救打开了窗口，也凸显高原边境地区基础设施抗灾能力的短板。灾害之后，如何把应急抢通升级为常态韧性，是边境治理的必答题。</div>
+            <p class="src">来源：川观新闻（<a href="https://cbgc.scol.com.cn/news/7919242" target="_blank">cbgc.scol.com.cn</a>）</p>
+            <div class="pageno">— 12 —</div>
+          </div>
+        </div>
+        <div class="face back">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">13</div>
+            <h2 class="news-t">撤展抗议：中方团队就光州双年展涉台错误宣布退出</h2>
+            <p class="news-b">中国驻韩国大使馆就光州双年展涉台问题多次沟通后，中方策展团队宣布撤展，表达强烈抗议。中方指出，主办方同意中国台湾地区使用不符合其身份的名称参展，违反一个中国原则。</p>
+            <div class="watch"><b>观此：</b>文化活动里的称谓争议，本质是政治原则的延伸。中方以撤展这一明确姿态划定底线，也提醒国际展会主办方：在涉及主权的问题上模糊处理会付出实际代价。这是一次用小切口呈现大原则的个案。</div>
+            <p class="src">来源：网易新闻（<a href="https://c.m.163.com/news/a/L5V7V8K805148VUD.html" target="_blank">c.m.163.com</a>）</p>
+            <div class="pageno">— 13 —</div>
+          </div>
+        </div>
+      </div>
+      <!-- ===== leaf 8：新闻14 / 新闻15 ===== -->
+      <div class="leaf">
+        <div class="face front">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">14</div>
+            <h2 class="news-t">超强厄尔尼诺来袭：极端天气风险或延续至 2027 年</h2>
+            <p class="news-b">世界气象组织 9 月 3 日发布通报，确认厄尔尼诺现象已形成并将持续增强，预计发展为超强级别事件，对全球降水与温度格局产生重大影响，相关极端天气风险将持续至 2027 年。</p>
+            <div class="watch"><b>观此：</b>厄尔尼诺像一台被调大的气候振荡器，会放大旱涝、热浪与台风的极端程度。对农业、航运与能源调度来说，这意味着未来一年多要习惯异常成为常态。各国气象与应急部门提前进入备战，比事后救灾更划算。</div>
+            <p class="src">来源：中国新闻网（<a href="https://www.zj.chinanews.com/jzkzj/2026-09-04/detail-ihfivshq1305812.shtml" target="_blank">zj.chinanews.com</a>）</p>
+            <div class="pageno">— 14 —</div>
+          </div>
+        </div>
+        <div class="face back">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">15</div>
+            <h2 class="news-t">罗曼望远镜升空：NASA 派它去绘制宇宙暗物质地图</h2>
+            <p class="news-b">搭载于 SpaceX 猎鹰重型火箭的南希·格雷斯·罗曼空间望远镜已于 8 月 30 日发射，开启奔赴日地拉格朗日 L2 点的百万公里航程。它将用广角红外视野巡天，聚焦暗物质、暗能量与系外行星。</p>
+            <div class="watch"><b>观此：</b>罗曼望远镜被寄望为宽场版哈勃，一次成像面积是哈勃的百倍量级，五年任务预计积累两万太字节数据。它要回答的是宇宙最深的谜题——那约占宇宙百分之九十五、却至今看不见的暗能量与暗物质，将第一次被系统性地测绘。</div>
+            <p class="src">来源：NASA（<a href="https://www.nasa.gov/?p=989205/" target="_blank">nasa.gov</a>）</p>
+            <div class="pageno">— 15 —</div>
+          </div>
+        </div>
+      </div>
+      <!-- ===== leaf 9：新闻16 / 新闻17 ===== -->
+      <div class="leaf">
+        <div class="face front">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">16</div>
+            <h2 class="news-t">复发风险降 50%：全球首款 III 期阳性 mRNA 癌症疫苗出炉</h2>
+            <p class="news-b">Moderna 与默沙东联合开发的个性化 mRNA 癌症疫苗 mRNA-4157，在高危黑色素瘤术后辅助治疗的 III 期试验中达成无复发生存与无转移生存双重终点。该疫苗根据患者肿瘤基因突变一人一苗定制，可将复发风险降低约一半。</p>
+            <div class="watch"><b>观此：</b>这是肿瘤治疗从千人一方走向一人一苗的里程碑。把患者自身的突变特征编成疫苗、教会免疫系统精准清剿残余癌细胞，思路一旦在更多癌种验证成功，将改写术后防复发的范式。不过定制成本极高，短期仍难普及。</div>
+            <p class="src">来源：21世纪经济报道（<a href="https://www.toutiao.com/article/7681165019182023174/" target="_blank">toutiao.com</a>）</p>
+            <div class="pageno">— 16 —</div>
+          </div>
+        </div>
+        <div class="face back">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">17</div>
+            <h2 class="news-t">流感疫苗也用 mRNA：GSK 将启动首个双抗原靶向 III 期</h2>
+            <p class="news-b">葛兰素史克（GSK）公布其 mRNA 季节性流感疫苗 II 期积极数据，显示对甲型、乙型流感的免疫应答优于现有疫苗，并计划于 9 月启动 III 期。这是首款同时靶向血凝素与神经氨酸酶两种表面抗原的 mRNA 流感疫苗。</p>
+            <div class="watch"><b>观此：</b>现有流感疫苗主要只防血凝素，GSK 把神经氨酸酶也纳入靶点，相当于给防护加了第二道锁，有望改善重症与传播控制。mRNA 技术从新冠走向流感常态化，说明这场疫情催生的平台正在渗透进更广阔的常见病预防战场。</div>
+            <p class="src">来源：GSK（<a href="https://www.gsk.com/media/dsebith3/options_phase-ii-data_stock-exchange-announcement.pdf" target="_blank">gsk.com</a>）</p>
+            <div class="pageno">— 17 —</div>
+          </div>
+        </div>
+      </div>
+      <!-- ===== leaf 10：新闻18 / 新闻19 ===== -->
+      <div class="leaf">
+        <div class="face front">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">18</div>
+            <h2 class="news-t">86 吨黄金搬家：荷兰从美加运回，美元信任现裂痕</h2>
+            <p class="news-b">荷兰央行 9 月 2 日公布，今年 3 月至 8 月已将约 86 吨黄金储备从纽约和渥太华转移至伦敦，存放在纽约的比例从 31.3% 大幅降至 18.5%。此前法国也已将存放纽约的 129 吨黄金悉数转回本土。</p>
+            <div class="watch"><b>观此：</b>黄金搬家的背后，是盟友对资产主权安全的重新盘算。当金融制裁被频繁用作武器，各国央行更倾向把金条放在自己或可信的近岸托管地。这是去美元化的一缕信号，也折射出战后建立的美元托管体系正在被悄悄松动。</div>
+            <p class="src">来源：央视新闻（<a href="http://m.ce.cn/gj/gd/202609/t20260904_3192318.shtml" target="_blank">m.ce.cn</a>）</p>
+            <div class="pageno">— 18 —</div>
+          </div>
+        </div>
+        <div class="face back">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">19</div>
+            <h2 class="news-t">终极加息？欧洲央行 9 月 10 日或再升 25 基点至 2.50%</h2>
+            <p class="news-b">路透 9 月 3 日调查显示，65 位经济学家一致预计欧洲央行将在 9 月 10 日加息 25 个基点至 2.50%，此后停止行动。欧元区 8 月通胀升至 3.3%，但多数观点认为能源冲击不会广泛扩散。</p>
+            <div class="watch"><b>观此：</b>若兑现，这轮紧缩仅含两次加息，为 2011 年以来最短周期，说明欧央行在抑通胀与保增长之间已逼近临界点。德、法等长债收益率走高，也反映出市场对财政与能源双重压力的定价。一档 25 基点，牵动的是整个欧元区的融资成本。</div>
+            <p class="src">来源：腾讯新闻（<a href="https://new.qq.com/rain/a/20260904A029TT00?refer=cp_1009" target="_blank">new.qq.com</a>）</p>
+            <div class="pageno">— 19 —</div>
+          </div>
+        </div>
+      </div>
+      <!-- ===== leaf 11：新闻20 / 封底 ===== -->
+      <div class="leaf">
+        <div class="face front">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">20</div>
+            <h2 class="news-t">沃勒放鸽、黄金破 4500：美联储一开口，市场全线翻红</h2>
+            <p class="news-b">美联储理事沃勒 9 月 3 日表示，若未来两周通胀数据延续降温，倾向支持 9 月维持利率不变。消息一出，9 月加息概率由约 63% 回落至 52% 下方，美股、黄金、比特币同步走高，现货黄金盘中突破 4510 美元。</p>
+            <div class="watch"><b>观此：</b>一句按兵不动的预期，就能让风险资产集体松一口气，足见市场对利率路径的敏感。黄金破 4500 既是对美元走弱的回应，也叠加了央行购金与避险需求。美联储的关注点正从抗通胀微妙位移，全球资产定价随之重新校准。</div>
+            <p class="src">来源：华尔街见闻（<a href="https://www.163.com/dy/article/L5VCFLF905198NMR.html" target="_blank">163.com</a>）</p>
+            <div class="pageno">— 20 —</div>
+          </div>
+        </div>
+        <div class="face back back-cover">
+          <div class="pad">
+            <div class="end-big">本期完</div>
+            <div class="end-sub">
+              <span class="disc">纯新闻叙事</span><br>
+              我们坚持纯新闻叙事——只呈现事实<br>
+              与新闻价值，把研究分析留给您自己<br><br>
+              全球重要动态 · 2026-09-04<br>
+              翻动书页，用十分钟把握昨夜今晨的世界
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="nav">
+  <button id="prev" title="上一页（←）">‹</button>
+  <div class="pg" id="pg">1 / 13</div>
+  <button id="next" title="下一页（→）">›</button>
+</div>
+
+<script>
+  const book = document.getElementById('book');
+  const leaves = Array.from(book.querySelectorAll('.leaf'));
+  const N = leaves.length;            // 12 张书页
+  const TOTAL = N + 1;                // 13 个可视跨页（桌面）
+  let flipped = 0;
+  let mobileMode = false;
+  let mobileIndex = 0;
+
+  // 手机单页模式：12 张书页 × 2 面 = 24 个单页
+  const FACES = [];
+  leaves.forEach((lf, i) => {
+    FACES.push({leaf: i, face: 'front'});
+    FACES.push({leaf: i, face: 'back'});
+  });
+
+  function isMobile(){ return window.innerWidth <= 760; }
+
+  function updateDesktop(){
+    leaves.forEach((lf, i) => {
+      lf.style.zIndex = (i < flipped) ? (i + 1) : ((N + 100) - i);
+    });
+    document.getElementById('pg').textContent = (flipped + 1) + ' / ' + TOTAL;
+    document.getElementById('prev').disabled = (flipped <= 0);
+    document.getElementById('next').disabled = (flipped >= N);
+  }
+
+  function updateMobile(){
+    leaves.forEach(lf => lf.classList.remove('mobile-active','show-front','show-back'));
+    const f = FACES[mobileIndex];
+    const lf = leaves[f.leaf];
+    lf.classList.add('mobile-active', f.face === 'front' ? 'show-front' : 'show-back');
+    document.getElementById('pg').textContent = (mobileIndex + 1) + ' / ' + FACES.length;
+    document.getElementById('prev').disabled = (mobileIndex <= 0);
+    document.getElementById('next').disabled = (mobileIndex >= FACES.length - 1);
+  }
+
+  function refresh(){
+    mobileMode = isMobile();
+    const hint = document.getElementById('hint');
+    if(mobileMode){
+      leaves.forEach(lf => { lf.style.transform = ''; lf.style.zIndex = ''; });
+      updateMobile();
+      if(hint) hint.textContent = '📖 点击左右两侧或左右滑动翻页 · 共 ' + FACES.length + ' 页';
+    } else {
+      leaves.forEach(lf => lf.classList.remove('mobile-active','show-front','show-back'));
+      updateDesktop();
+      if(hint) hint.textContent = '📖 点击书页左右两侧 或 使用键盘 ← → 翻页 · 共 ' + TOTAL + ' 张';
+    }
+  }
+
+  function goNext(){
+    if(mobileMode){
+      if(mobileIndex >= FACES.length - 1) return;
+      mobileIndex++;
+      updateMobile();
+    } else {
+      if(flipped >= N) return;
+      const lf = leaves[flipped];
+      lf.style.zIndex = 9999;
+      lf.style.transform = 'rotateY(-180deg)';
+      flipped++;
+      setTimeout(updateDesktop, 920);
+    }
+  }
+
+  function goPrev(){
+    if(mobileMode){
+      if(mobileIndex <= 0) return;
+      mobileIndex--;
+      updateMobile();
+    } else {
+      if(flipped <= 0) return;
+      flipped--;
+      const lf = leaves[flipped];
+      lf.style.zIndex = 9999;
+      lf.style.transform = 'rotateY(0deg)';
+      setTimeout(updateDesktop, 920);
+    }
+  }
+
+  book.addEventListener('click', (e) => {
+    const r = book.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width;
+    if(mobileMode){
+      // 手机：点左侧 30% 上一页，右侧 30% 下一页，中间区域留给点击链接
+      if(x < 0.3) goPrev();
+      else if(x > 0.7) goNext();
+    } else {
+      if(x < 0.5) goPrev(); else goNext();
+    }
+  });
+
+  // 手机触摸滑动翻页
+  let touchStartX = null;
+  book.addEventListener('touchstart', (e) => {
+    touchStartX = e.touches[0].clientX;
+  }, {passive:true});
+  book.addEventListener('touchend', (e) => {
+    if(touchStartX === null) return;
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if(Math.abs(dx) > 50){
+      if(dx < 0) goNext(); else goPrev();
+    }
+    touchStartX = null;
+  }, {passive:true});
+
+  document.getElementById('next').addEventListener('click', (e) => { e.stopPropagation(); goNext(); });
+  document.getElementById('prev').addEventListener('click', (e) => { e.stopPropagation(); goPrev(); });
+  window.addEventListener('keydown', (e) => {
+    if(e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') goNext();
+    if(e.key === 'ArrowLeft' || e.key === 'ArrowUp') goPrev();
+  });
+
+  // 自适应缩放：桌面保持缩放，手机不缩放
+  function fit(){
+    const wrap = document.getElementById('scaleWrap');
+    if(mobileMode){ wrap.style.transform = ''; return; }
+    const avail = window.innerWidth - 24;
+    const s = Math.min(1, avail / (940 + 40));
+    wrap.style.transform = 'scale(' + s + ')';
+  }
+
+  // 支持 URL 直达某页：?page=5（第 5 页），手机和桌面均生效
+  function initFromUrl(){
+    const m = location.search.match(/[?&]page=(\d+)/);
+    if(!m) return;
+    const n = Math.max(1, parseInt(m[1], 10)) - 1;
+    if(mobileMode){
+      mobileIndex = Math.max(0, Math.min(n, FACES.length - 1));
+      updateMobile();
+    } else {
+      flipped = Math.max(0, Math.min(n, N));
+      updateDesktop();
+    }
+  }
+
+  window.addEventListener('resize', () => { refresh(); fit(); });
+
+  refresh();
+  fit();
+  initFromUrl();
+</script>
+</body>
+</html>
