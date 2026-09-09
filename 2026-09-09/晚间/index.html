@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>全球重要动态 · 2026-09-09 晚间版（翻页杂志）</title>
+<style>
+  :root{
+    --paper:#f6f1e6;
+    --ink:#211d18;
+    --muted:#7a6f60;
+    --red:#9e1b1b;
+    --rule:#2a2620;
+    --box:#ebe0c8;
+    --boxline:#d8c9a9;
+    --dark1:#1b2330;
+    --dark2:#0e131d;
+    --gold:#c8a24a;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:radial-gradient(1200px 700px at 50% -10%, #34302a 0%, #211e19 55%, #16140f 100%);
+    font-family:"Noto Serif SC","Source Han Serif SC","Songti SC","SimSun",Georgia,serif;
+    color:var(--ink);
+    line-height:1.75;
+    -webkit-font-smoothing:antialiased;
+  }
+  .stage{
+    min-height:100vh;
+    display:flex;flex-direction:column;align-items:center;
+    padding:26px 12px 96px;
+  }
+  .hint{
+    color:#cfc4ad;font-size:13px;letter-spacing:.08em;margin:0 0 18px;opacity:.8;
+  }
+  .scaleWrap{transform-origin:top center;}
+  .book{
+    position:relative;width:940px;height:700px;
+    perspective:2600px;transform-style:preserve-3d;
+    filter:drop-shadow(0 24px 50px rgba(0,0,0,.55));
+  }
+  .leaf{
+    position:absolute;top:0;left:470px;width:470px;height:700px;
+    transform-origin:left center;transform-style:preserve-3d;
+    transform:rotateY(0deg);
+    transition:transform .9s cubic-bezier(.55,.08,.2,1);
+  }
+  .face{
+    position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;
+    border:1px solid #cabd9f;overflow:hidden;
+    display:flex;flex-direction:column;
+  }
+  .front{transform:rotateY(0deg);background:var(--paper);}
+  .back{transform:rotateY(180deg);background:var(--paper);}
+  .pad{padding:30px 28px;flex:1;display:flex;flex-direction:column;}
+
+  .folio{font-size:11px;letter-spacing:.22em;color:var(--muted);text-transform:uppercase;
+    border-bottom:1px solid var(--boxline);padding-bottom:7px;margin-bottom:14px;}
+
+  /* 新闻页 */
+  .news-no{font-size:44px;font-weight:700;color:var(--red);line-height:.85;font-variant-numeric:tabular-nums;}
+  .news-t{font-size:21px;font-weight:700;line-height:1.35;margin:10px 0 14px;}
+  .news-b{font-size:14.5px;line-height:1.85;text-align:justify;margin:0 0 14px;flex:1;}
+  .watch{background:var(--box);border-left:4px solid var(--red);padding:9px 12px;font-size:13px;line-height:1.7;margin:0 0 10px;}
+  .watch b{color:var(--red);margin-right:3px;}
+  .src{font-size:12px;color:var(--muted);line-height:1.6;}
+  .src a{color:#3a5e8c;text-decoration:none;border-bottom:1px dotted #3a5e8c;word-break:break-all;}
+  .src a:hover{color:var(--red);}
+  .pageno{text-align:center;font-size:11px;color:var(--muted);letter-spacing:.35em;margin-top:10px;}
+
+  /* 卷首 / 目录 / 封底 */
+  .sec-h{font-size:25px;font-weight:700;margin:4px 0 16px;border-bottom:2px solid var(--rule);padding-bottom:9px;}
+  .lead-p{font-size:15px;line-height:1.95;text-align:justify;margin:0 0 14px;}
+  .lead-note{font-size:13.5px;line-height:1.9;color:#3a342b;background:var(--box);padding:12px 14px;border-left:4px solid var(--red);}
+  .toc{columns:2;column-gap:22px;font-size:11.5px;line-height:1.35;padding-left:18px;margin:0;}
+  .toc li{margin-bottom:5px;break-inside:avoid;}
+  .toc li::marker{color:var(--red);font-weight:700;font-variant-numeric:tabular-nums;}
+  .toc li span{display:none;}
+  .contents-pad{padding:18px 22px 32px;}
+  .contents-pad .folio{margin-bottom:6px;}
+  .contents-pad .sec-h{margin:0 0 6px;padding-bottom:6px;}
+  .contents-pad .pageno{margin-top:2px;}
+  .disc{color:var(--red);font-weight:700;}
+  .end-box{border:1px solid var(--boxline);padding:14px;font-size:13px;line-height:1.85;background:var(--box);}
+
+  /* 封面 */
+  .cover{
+    background:
+      radial-gradient(700px 500px at 50% 18%, rgba(60,80,120,.35), transparent 60%),
+      linear-gradient(160deg,#202a3b 0%, #131a26 55%, #0c111a 100%);
+    color:#f1e9d6;border-color:#3a455c;
+  }
+  .cover-in{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:34px;}
+  .cover-top{font-size:12px;letter-spacing:.5em;color:var(--gold);text-transform:uppercase;margin-bottom:26px;}
+  .cover-title{font-size:62px;font-weight:700;letter-spacing:.14em;line-height:1.15;margin:0;
+    text-shadow:0 2px 18px rgba(200,162,74,.35);}
+  .cover-rule{width:120px;height:2px;background:var(--gold);margin:26px 0 20px;opacity:.8;}
+  .cover-sub{font-size:15px;letter-spacing:.32em;color:#d9cfb6;}
+  .cover-foot{position:absolute;bottom:30px;left:0;right:0;text-align:center;
+    font-size:12px;letter-spacing:.18em;color:#b8ad94;}
+
+  /* 封底 */
+  .back-cover{
+    background:linear-gradient(160deg,#202a3b 0%, #131a26 100%);
+    color:#f1e9d6;border-color:#3a455c;
+  }
+  .back-cover .pad{align-items:center;justify-content:center;text-align:center;}
+  .back-cover .end-big{font-size:40px;font-weight:700;letter-spacing:.2em;color:#f1e9d6;margin:0 0 18px;}
+  .back-cover .end-sub{font-size:13px;letter-spacing:.18em;color:#b8ad94;line-height:2;}
+
+  /* 导航（透明浮层，不遮挡正文） */
+  .nav{position:fixed;bottom:0;left:0;right:0;height:62px;background:rgba(18,16,13,.48);
+    display:flex;align-items:center;justify-content:center;gap:22px;z-index:60;
+    border-top:1px solid rgba(200,162,74,.18);backdrop-filter:blur(8px);pointer-events:none;}
+  .nav button{pointer-events:auto;background:transparent;border:1px solid rgba(200,162,74,.55);color:#e8e0cf;
+    font-size:22px;width:46px;height:38px;border-radius:8px;cursor:pointer;
+    font-family:inherit;transition:.2s;display:flex;align-items:center;justify-content:center;}
+  .nav button:hover{background:rgba(200,162,74,.25);border-color:var(--gold);}
+  .nav button:disabled{opacity:.35;cursor:default;}
+  .nav .pg{color:#f5efe3;font-size:14px;letter-spacing:.12em;min-width:96px;text-align:center;
+    text-shadow:0 1px 4px rgba(0,0,0,.55);}
+
+  @media (max-width:760px){
+    .hint{
+      position:fixed;top:0;left:0;right:0;z-index:70;
+      font-size:12px;margin:0;padding:10px 14px;
+      background:rgba(18,16,13,.60);color:#cfc4ad;
+      text-align:center;letter-spacing:.04em;
+      backdrop-filter:blur(6px);border-bottom:1px solid rgba(200,162,74,.2);
+    }
+    .stage{
+      position:fixed;inset:0;padding:0;display:block;overflow:hidden;
+      background:radial-gradient(1200px 700px at 50% -10%, #34302a 0%, #211e19 55%, #16140f 100%);
+    }
+    .scaleWrap{transform:none !important;width:100vw;height:100vh;}
+    .book{
+      position:absolute;inset:0;width:100vw;height:100vh;
+      perspective:none;transform-style:flat;filter:none;
+    }
+    .leaf{
+      position:absolute;inset:0;width:100vw;height:100vh;left:0 !important;
+      opacity:0;pointer-events:none;z-index:0;
+      transform:none !important;transition:opacity .35s ease;
+    }
+    .leaf.mobile-active{opacity:1;pointer-events:auto;z-index:10;}
+    .leaf .face{display:none !important;position:absolute;inset:0;width:100%;height:100%;
+      transform:none !important;backface-visibility:visible;border:none;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+    .leaf.show-front .front{display:flex !important;}
+    .leaf.show-back .back{display:flex !important;}
+    .pad{padding:64px 22px 150px;}
+
+    .cover-in{padding:70px 26px 26px;}
+    .cover-top{font-size:13px;margin-bottom:22px;}
+    .cover-title{font-size:52px;}
+    .cover-sub{font-size:16px;letter-spacing:.22em;}
+    .cover-foot{bottom:110px;font-size:13px;}
+
+    .sec-h{font-size:28px;}
+    .lead-p{font-size:17px;line-height:2;}
+    .lead-note{font-size:15px;}
+    .toc{columns:2;column-gap:14px;padding-left:16px;font-size:11.5px;line-height:1.25;}
+    .toc li{margin-bottom:4px;break-inside:avoid;}
+    .toc li::marker{font-size:11.5px;}
+    .contents-pad{padding:64px 16px 170px;}
+    .contents-pad .folio{margin-bottom:4px;}
+    .contents-pad .sec-h{font-size:22px;margin:0 0 8px;padding-bottom:6px;}
+    .contents-pad .pageno{margin-top:auto;padding-top:10px;}
+
+    .news-no{font-size:58px;}
+    .news-t{font-size:25px;line-height:1.4;margin:12px 0 16px;}
+    .news-b{font-size:16px;line-height:2;}
+    .watch{font-size:14.5px;line-height:1.85;padding:12px 14px;}
+    .src{font-size:13px;line-height:1.75;}
+
+    .back-cover .end-big{font-size:48px;}
+    .back-cover .end-sub{font-size:15px;line-height:2.2;}
+
+    .nav{height:58px;gap:18px;}
+    .nav button{width:50px;height:40px;font-size:24px;}
+    .nav .pg{font-size:14px;min-width:76px;}
+  }
+</style>
+</head>
+<body>
+<div class="stage">
+  <p class="hint" id="hint">📖 点击书页左右两侧 或 使用键盘 ← → 翻页</p>
+  <div class="scaleWrap" id="scaleWrap">
+    <div class="book" id="book">
+
+      <!-- ===== leaf 0：封面 / 卷首语 ===== -->
+      <div class="leaf">
+        <div class="face front cover">
+          <div class="cover-in">
+            <div class="cover-top">Global Daily Brief</div>
+            <h1 class="cover-title">全球<br>重要动态</h1>
+            <div class="cover-rule"></div>
+            <div class="cover-sub">一日廿事 · 纯新闻叙述</div>
+            <div class="cover-foot">2026 年 9 月 9 日　星期三 · 晚间版</div>
+          </div>
+        </div>
+        <div class="face back">
+          <div class="pad">
+            <div class="folio">卷首语 · Foreword</div>
+            <h2 class="sec-h">致读者</h2>
+            <p class="lead-p">一日将尽，世界又发生了哪些大事？本期为您精选 <b>20 条</b> 值得关注的全球动态，覆盖灾害救援、地缘博弈、AI 算力、航天探索、产业政策和民生医疗。</p>
+            <p class="lead-p">我们坚持<b>纯新闻叙事</b>——只呈现事实与新闻价值，把研究分析留给您自己。翻动书页，用十分钟把握今日世界的多重注脚。</p>
+            <div class="lead-note">本期聚焦：AI动手执行·天眼重绘气体·机器人量产</div>
+            <div class="pageno">— 卷首 —</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== leaf 1：目录 / 新闻01 ===== -->
+      <div class="leaf">
+        <div class="face front">
+          <div class="pad contents-pad">
+            <div class="folio">目录 · Contents</div>
+            <h2 class="sec-h">本期目录</h2>
+            <ol class="toc">
+              <li>从会说到会做：OpenAI 发布 GPT-6 Astra，黄仁勋称 AGI 已到来</li>
+              <li>3.1个AI工作日：OpenAI 的研究实习生正式入职</li>
+              <li>320B参数只点18B：Z.ai 开源 GLM-5.3-Flash 多模态模型</li>
+              <li>350吨推力、可复用25次：智神星一号首飞成功，今年第61次发射</li>
+              <li>0.6%的精度：中国天眼绘就迄今最大宇宙气体图谱</li>
+              <li>80亿年后的重逢：天眼为中子星找回遗失的户籍证明</li>
+              <li>造星跌了2.5倍，气体只少1.4倍：宇宙断粮之谜被改写</li>
+              <li>一颗星三种发光：脉冲星 PSR J0846-3533 被证实共存三类辐射</li>
+              <li>火星的生命痕迹藏在哪？柴达木给出双矿物答案</li>
+              <li>首个IL-33单抗：慢阻肺两项III期同时登《新英格兰医学杂志》</li>
+              <li>衰老时钟倒退近6岁：AI 设计的肺纤维化药意外现抗老信号</li>
+              <li>700℃、5秒：西安交大让废旧磷酸铁锂原地复活</li>
+              <li>-40℃仍满血：低温锂离子电容器能量密度做到传统8.9倍</li>
+              <li>3000小时不衰减：日本钙钛矿叠层电池刷新耐久性纪录</li>
+              <li>年捕80万吨：荷兰氨厂碳捕集设施投运，二氧化碳运往海底封存</li>
+              <li>全球首条：小鹏人形机器人自动化产线启用，年底规模量产</li>
+              <li>3B参数让两台机器人一起挂裤子：芝诺发布 Zeno-1 具身基础模型</li>
+              <li>3500亿颗：Arm 架构芯片累计出货跨过新里程碑</li>
+              <li>近30国使馆同台：第十一届炫彩世界在首钢园开幕</li>
+              <li>牛津剑桥划进秦淮河：南京国际赛艇公开赛41支队伍集结</li>
+            </ol>
+            <div class="pageno">— 目录 —</div>
+          </div>
+        </div>
+        <div class="face back">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 晚间版</div>
+            <div class="news-no">01</div>
+            <h2 class="news-t">从会说到会做：OpenAI 发布 GPT-6 Astra，黄仁勋称 AGI 已到来</h2>
+            <p class="news-b">OpenAI 发布新一代模型 GPT-6 Astra，重点强化操作电脑与执行复杂多步任务的能力。据官方展示，该模型可以填写在线表格、更新客户管理系统、整理日程，也能分析科研数据、生成图表、搭建网站并检查功能；用户只需交代目标，模型便可自行规划步骤、切换工具并修正错误。英伟达首席执行官黄仁勋随后公开表示，通用人工智能已经到来。</p>
+            <div class="watch"><b>观此：</b>这一代模型的突破点不在会说，而在会做。过去的 AI 更像一个回答问题的窗口，如今它开始接管一整串动作：开软件、找字段、填表、发现错了再改。这种能力一旦稳定，被改变的就不是一个功能，而是办公流程本身。不过通用人工智能是个分量极重的词，从能干活到能通用还有很长的路，眼下更准确的说法是，AI 从顾问变成了实习生，能不能转正要看它在没人逐步指挥时的表现。</div>
+            <p class="src">来源：财联社（<a href="https://view.inews.qq.com/a/20260909A0350M00" target="_blank">view.inews.qq.com</a>）</p>
+            <div class="pageno">— 01 —</div>
+          </div>
+        </div>
+      </div>
+      <!-- ===== leaf 2：新闻02 / 新闻03 ===== -->
+      <div class="leaf">
+        <div class="face front">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 晚间版</div>
+            <div class="news-no">02</div>
+            <h2 class="news-t">3.1个AI工作日：OpenAI 的研究实习生正式入职</h2>
+            <p class="news-b">据 OpenAI 披露，其 AI 研究实习生项目于本月正式投入日常运行。每位人类研究员背后平均有 3.1 个 AI 工作日并行推进，人均每日推理开销约 600 美元。这意味着研究团队的工作方式，从一个人配一台电脑，变成一个人调度一支不睡觉的队伍。</p>
+            <div class="watch"><b>观此：</b>3.1 这个数字值得琢磨：它不是说 AI 顶替了研究员，而是把一个人的产出面扩大了三倍多。真正的瓶颈因此从算力转移到判断力——有人提出对的问题、识别错的答案时，这些并行的 AI 工作日才是产能，否则只是更快的原地打转。人均日耗 600 美元也在提示，这种增强目前还是少数机构的特权，成本曲线怎么走，决定了它会扩散还是继续集中。</div>
+            <p class="src">来源：科技日报早报（<a href="https://weibo.com/5236032763/5341133988168605" target="_blank">weibo.com</a>）</p>
+            <div class="pageno">— 02 —</div>
+          </div>
+        </div>
+        <div class="face back">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 晚间版</div>
+            <div class="news-no">03</div>
+            <h2 class="news-t">320B参数只点18B：Z.ai 开源 GLM-5.3-Flash 多模态模型</h2>
+            <p class="news-b">Z.ai 发布 GLM-5.3-Flash，这是一个原生多模态开源模型，总参数 320B，但单次推理仅激活约 18B。架构上把稀疏注意力与线性注意力结合，并引入流形约束超连接，目标是在保留长上下文与智能体能力的同时大幅压低推理成本。团队称其在约 30 万亿 token 的多模态语料上完成训练。</p>
+            <div class="watch"><b>观此：</b>320B 参数只用 18B 干活，是当前开源界最典型的一条路线：不再比谁的密度大，而是比谁能少激活。稀疏激活与线性注意力的组合，本质是让模型每次只点亮需要的那一小块。对开发者而言这比参数榜单实在得多——真正的门槛从来不是模型有多大，而是同样效果下每 token 要花多少钱。</div>
+            <p class="src">来源：AI Seng Tech（<a href="https://aisengtech.com/ai-research-open-source-llm-model-Brief-2026-09-09" target="_blank">aisengtech.com</a>）</p>
+            <div class="pageno">— 03 —</div>
+          </div>
+        </div>
+      </div>
+      <!-- ===== leaf 3：新闻04 / 新闻05 ===== -->
+      <div class="leaf">
+        <div class="face front">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 晚间版</div>
+            <div class="news-no">04</div>
+            <h2 class="news-t">350吨推力、可复用25次：智神星一号首飞成功，今年第61次发射</h2>
+            <p class="news-b">星河动力研制的智神星一号液体运载火箭9月9日在酒泉东风商业航天创新试验区专属工位发射升空，顺利进入预定轨道，首飞圆满成功。该火箭全长 52 米，一级由七台苍穹-50 发动机提供约 350 吨推力，设计可重复使用不少于 25 次。此次成功使星河动力成为国内第 4 家具备液体火箭发射能力的商业公司，也是我国今年第 61 次航天发射。</p>
+            <div class="watch"><b>观此：</b>国内第 4 家掌握液体火箭的商业公司，这个第 4 比单次成功更有分量——它说明液体火箭不再是少数团队的专属手艺，而成了一条能被多家公司走通的工业路径。可重复使用 25 次的设计指标则指向另一件事：竞争焦点正从能不能上天，转向同一枚箭能上多少次。今年第 61 次发射也意味着，发射正在从一件大事变成一种常规运力。</div>
+            <p class="src">来源：航天员杂志（<a href="http://view.inews.qq.com/a/20260909A06JEM00" target="_blank">view.inews.qq.com</a>）</p>
+            <div class="pageno">— 04 —</div>
+          </div>
+        </div>
+        <div class="face back">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 晚间版</div>
+            <div class="news-no">05</div>
+            <h2 class="news-t">0.6%的精度：中国天眼绘就迄今最大宇宙气体图谱</h2>
+            <p class="news-b">中国科学院国家天文台团队依托中国天眼 FAST，绘就目前国际上观测范围最广、样本数量最多的宇宙中性氢气体图谱。团队首次将中性氢质量函数的可靠测量范围拓展至 100 万倍太阳质量，并把近邻宇宙中性氢密度的测量精度提升到 0.6%，创下人类观测该物理量的精度新高。相关成果见于9月9日《科技日报》。</p>
+            <div class="watch"><b>观此：</b>中性氢是星系造星的原料库存，但它发出的 21 厘米谱线极其微弱，单个遥远星系的信号几乎埋在噪声里。把密度测到 0.6% 的精度，相当于给宇宙的油气田做了一次精确盘点。这批数据公开后，星系演化、宇宙大尺度结构乃至引力波溯源都能直接取用，下一代平方公里阵列射电望远镜也将以它为基准——大科学装置的价值，正在于把结果留给别人用。</div>
+            <p class="src">来源：中国科学院（<a href="https://www.cas.cn/cm/202609/t20260909_5119993.shtml" target="_blank">cas.cn</a>）</p>
+            <div class="pageno">— 05 —</div>
+          </div>
+        </div>
+      </div>
+      <!-- ===== leaf 4：新闻06 / 新闻07 ===== -->
+      <div class="leaf">
+        <div class="face front">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 晚间版</div>
+            <div class="news-no">06</div>
+            <h2 class="news-t">80亿年后的重逢：天眼为中子星找回遗失的户籍证明</h2>
+            <p class="news-b">中国科学院紫金山天文台、国家天文台等组成的国际团队，依托中国天眼 FAST、南非 MeerKAT 射电望远镜与加拿大-法国-夏威夷光学望远镜，首次在疏散星团潮汐尾中精准识别出脉冲星。目标为银河系最古老的疏散星团 NGC 6791，团队用 FAST 探测到自转周期约 1.9 秒的孤立脉冲星 PSR J1921+3745，并确认它位于星团东侧的潮汐结构中。成果发表于《科学通报》。</p>
+            <div class="watch"><b>观此：</b>银河系盘上已发现数千颗脉冲星，却没人直接见过它们是怎么从诞生星团走出来的，这一段演化一直缺观测证据。这次的巧妙之处，在于把三台设备拼成一条证据链：FAST 负责找到，MeerKAT 精确定位，光学望远镜描出星团外围被撕开的潮汐结构。模拟还显示，只有低踢速的中子星才会被星团留住数十亿年再慢慢释放，等于给这颗星补上了一张迟到的出生证明。</div>
+            <p class="src">来源：环球网（<a href="https://www.toutiao.com/article/7683366566548800038" target="_blank">toutiao.com</a>）</p>
+            <div class="pageno">— 06 —</div>
+          </div>
+        </div>
+        <div class="face back">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 晚间版</div>
+            <div class="news-no">07</div>
+            <h2 class="news-t">造星跌了2.5倍，气体只少1.4倍：宇宙断粮之谜被改写</h2>
+            <p class="news-b">中国科学院国家天文台、上海天文台与上海交通大学等组成的国际合作团队，依托中国天眼 FAST 与国际暗能量光谱仪 DESI，对距今 45 亿年以来的宇宙中性氢演化做了高精度测量，分析覆盖约三分之一天区、约 250 万个星系。结果显示，45 亿年前宇宙恒星形成率约为当前的 2.5 倍，而同期中性氢密度仅约为当前的 1.4 倍。</p>
+            <div class="watch"><b>观此：</b>这组数字推翻了一个很顺理成章的旧解释：过去认为造星变少是因为冷气体被用光了，但实测显示气体储量只降了一点点，造星却掉了六成。于是问题被重新表述——不是没粮，而是粮仓里的米没能变成饭。目前研究指向的症结，在中性氢向分子氢转化的效率下降。这个转向很有价值，它把追问的方向从储量问题换成了转化问题，而后者是可以被下一代观测直接检验的。</div>
+            <p class="src">来源：上海市科委（<a href="https://stcsm.sh.gov.cn/xwzx/kjzl/20260909/d1098a1c8436446c8d395d9b90c7a823.html" target="_blank">stcsm.sh.gov.cn</a>）</p>
+            <div class="pageno">— 07 —</div>
+          </div>
+        </div>
+      </div>
+      <!-- ===== leaf 5：新闻08 / 新闻09 ===== -->
+      <div class="leaf">
+        <div class="face front">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 晚间版</div>
+            <div class="news-no">08</div>
+            <h2 class="news-t">一颗星三种发光：脉冲星 PSR J0846-3533 被证实共存三类辐射</h2>
+            <p class="news-b">中国科学院新疆天文台袁建平、温志刚研究员带领博士研究生王振，依托澳大利亚帕克斯 64 米射电望远镜，收集脉冲星 PSR J0846-3533 的上万组单脉冲信号并精细解析，证实单颗脉冲星可同时出现三种截然不同的辐射变化。相关成果刊发于《天体物理学报》。</p>
+            <div class="watch"><b>观此：</b>这颗星的三种表现分别是：信号短暂中断像灯塔临时熄火、脉冲轮廓快速切换形态、亮度每自转两圈完成一次循环。研究确认前两种源自中子星磁层大范围电流重构，第三种则源于星体内部粒子加速效率的周期性变化。把两种完全不同的涨落机制拆开，是构建统一脉冲星磁层理论的关键一步——过去这类现象散落在不同天体身上，很难判断是共性还是巧合。</div>
+            <p class="src">来源：中国科学院新疆天文台（<a href="https://www.xao.cas.cn/xwdt/cmsm/202609/t20260909_8280098.html" target="_blank">xao.cas.cn</a>）</p>
+            <div class="pageno">— 08 —</div>
+          </div>
+        </div>
+        <div class="face back">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 晚间版</div>
+            <div class="news-no">09</div>
+            <h2 class="news-t">火星的生命痕迹藏在哪？柴达木给出双矿物答案</h2>
+            <p class="news-b">中国科学院地质与地球物理研究所博士后黄童童与林巍研究员等，联合中国科学院广州地球化学研究所，选择柴达木盆地西部这一天然类火星区域，分析石膏与石盐晶体内部微小包裹体对有机质的保存作用，提出黏土与蒸发盐双矿物协同保护机制。成果发表于《通讯-地球与环境》。</p>
+            <div class="watch"><b>观此：</b>火星上黏土和蒸发盐常在同一区域出现，此前研究却多分开看。这次的意义在于把两者放进同一个框架：黏土靠大比表面积吸附有机分子、减缓冲刷与氧化，蒸发盐则在结晶时把有机质封进晶体做成时间胶囊。柴达木盆地作为天然类比区，等于给未来的火星采样点提供了一份选址指南——要找生命痕迹，先找这两种矿物同时在的地方。</div>
+            <p class="src">来源：中国科学院地质与地球物理研究所（<a href="https://igg.cas.cn/xwzx/yjcg/202609/t20260909_8279784.html" target="_blank">igg.cas.cn</a>）</p>
+            <div class="pageno">— 09 —</div>
+          </div>
+        </div>
+      </div>
+      <!-- ===== leaf 6：新闻10 / 新闻11 ===== -->
+      <div class="leaf">
+        <div class="face front">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 晚间版</div>
+            <div class="news-no">10</div>
+            <h2 class="news-t">首个IL-33单抗：慢阻肺两项III期同时登《新英格兰医学杂志》</h2>
+            <p class="news-b">9月8日，2026 年欧洲呼吸学会年会上公布 OBERON 与 TITANIA 两项 III 期临床试验完整结果，同步发表于《新英格兰医学杂志》。两项设计一致的试验共纳入 2306 例有症状慢阻肺病患者，在标准吸入治疗基础上加用 IL-33 单抗托扎利单抗，使中重度急性加重年发生率分别降低 29% 与 34%。该药已获美国食品药品监督管理局优先审评资格。</p>
+            <div class="watch"><b>观此：</b>这条新闻的关键不在降幅数字，而在入组条件。以往的慢阻肺生物制剂多只对血嗜酸性粒细胞升高的特定人群有效，而我国符合该条件的患者占比很低；这次试验干脆不设这项门槛，结果连计数低于 150 的人群也降了 23%。换句话说，它有可能把靶向治疗从少数人的选项，变成多数人的常规手段。IL-33 这个靶点也由此被正式验证。</div>
+            <p class="src">来源：南方+客户端（<a href="https://www.toutiao.com/article/7683459855738356265/" target="_blank">toutiao.com</a>）</p>
+            <div class="pageno">— 10 —</div>
+          </div>
+        </div>
+        <div class="face back">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 晚间版</div>
+            <div class="news-no">11</div>
+            <h2 class="news-t">衰老时钟倒退近6岁：AI 设计的肺纤维化药意外现抗老信号</h2>
+            <p class="news-b">《自然-生物技术》刊登一项国际研究：英矽智能与哈佛医学院等机构分析了 42 名特发性肺纤维化患者在参加一项为期 12 周临床试验期间采集的血清蛋白质组数据，发现接受 Rentosertib 治疗的患者体内多项衰老相关指标改善，用于评估生物学年龄的衰老时钟降幅最高接近 6 岁。该药的靶点筛选与分子设计均使用 AI 技术，今年 6 月已进入 3 期临床。</p>
+            <div class="watch"><b>观此：</b>值得关注的有两层。一是 AI 不只加速了药物发现，还在原定适应症之外帮我们看见意外信号——这类顺带发现一直是药理学的重要来源，如今多了一个系统化的筛查手段。二是研究者自己把话说得很谨慎：衰老时钟的变化分不清是药物直接作用于衰老，还是病情改善带来的间接结果。这种克制，正是这项研究可信的地方。</div>
+            <p class="src">来源：新华网（<a href="https://wzkj.wenzhou.gov.cn/col/col1375735/art/2026/art_f7a5c21bdb2348d787577453a88308c9.html" target="_blank">wzkj.wenzhou.gov.cn</a>）</p>
+            <div class="pageno">— 11 —</div>
+          </div>
+        </div>
+      </div>
+      <!-- ===== leaf 7：新闻12 / 新闻13 ===== -->
+      <div class="leaf">
+        <div class="face front">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 晚间版</div>
+            <div class="news-no">12</div>
+            <h2 class="news-t">700℃、5秒：西安交大让废旧磷酸铁锂原地复活</h2>
+            <p class="news-b">西安交通大学丁书江、杨国锐教授团队在废旧磷酸铁锂电池正极直接再生领域取得进展，提出电-热耦合场再生新策略。团队探明锂空位与锂-铁反位缺陷造成的声子局域化是修复效率低的根源，新工艺在 700℃ 下仅需 5 秒即可完成深度修复。再生材料 1C 倍率循环 1100 圈后容量保持率达 84.3%，能耗测算为 25.32 MJ/kg。成果发表于《德国应用化学》。</p>
+            <div class="watch"><b>观此：</b>五秒对比数小时，这是数量级的差别。传统固相再生需要长时间高温烧结，能耗居高不下还容易引发副反应；电-热耦合相当于用电场把电子-声子散射重新安排了一遍，让热量传得又快又均匀。退役电池潮正在到来，回收路线的能效直接决定它到底算绿色产业，还是只是另一种高耗能工业——这项工作的价值，正在于把能耗和温室气体排放都摆上了台面。</div>
+            <p class="src">来源：西北信息报（<a href="https://news.qq.com/rain/a/20260909A08RXG00" target="_blank">news.qq.com</a>）</p>
+            <div class="pageno">— 12 —</div>
+          </div>
+        </div>
+        <div class="face back">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 晚间版</div>
+            <div class="news-no">13</div>
+            <h2 class="news-t">-40℃仍满血：低温锂离子电容器能量密度做到传统8.9倍</h2>
+            <p class="news-b">中国科学院电工研究所马衍伟团队提出溶剂化解蔽电解液设计策略，采用 γ-戊内酯为主体溶剂、二氟草酸硼酸锂为功能锂盐，并引入弱配位乙酸乙酯削弱溶剂对锂离子的包裹，促进阴离子参与构建局部溶剂化结构。采用该电解液的全碳锂离子电容器在 -40℃ 条件下，基于电极材料质量的能量密度达 106.8 Wh/kg，为传统碳酸酯基电解液的 8.9 倍。</p>
+            <div class="watch"><b>观此：</b>低温是储能器件的死穴——温度一降，界面反应动力学就慢下来，设备明明有电却放不出来。这里的解法很巧：不去硬抗低温，而是先把溶剂对锂离子的包裹减弱，让阴离子参与进来，形成弱束缚的环境。8.9 倍这个数字意味着，极地科考、高空无人机、冬季电网调频这些场景里，储能终于不用靠加热箱续命了。</div>
+            <p class="src">来源：证券时报（<a href="https://www.toutiao.com/article/7683353144281956864" target="_blank">toutiao.com</a>）</p>
+            <div class="pageno">— 13 —</div>
+          </div>
+        </div>
+      </div>
+      <!-- ===== leaf 8：新闻14 / 新闻15 ===== -->
+      <div class="leaf">
+        <div class="face front">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 晚间版</div>
+            <div class="news-no">14</div>
+            <h2 class="news-t">3000小时不衰减：日本钙钛矿叠层电池刷新耐久性纪录</h2>
+            <p class="news-b">据日本经济新闻报道，东芝与信越化学工业携手新潟大学，开发出耐久性能提升至先前产品 1.5 倍的下一代钙钛矿光伏电池，属串联型结构。测试显示其在 85 摄氏度、相对湿度 85% 的严苛环境下可保持性能 3000 小时，此前的 2000 小时被视为世界领先水平。三方力争在 2030 年代实现产品销售，并将验证商用尺寸下能否保持同等性能。</p>
+            <div class="watch"><b>观此：</b>钙钛矿的弱项从来不是效率，而是怕湿怕热——实验室里漂亮的数据一到户外就衰减。用含干燥剂的特殊合成橡胶做外部密封，是个很朴素的工程思路，却把寿命从 2000 小时推到 3000 小时。值得注意的是这次选的是串联型，把硅电池和钙钛矿叠在一起，理论效率比柔性薄膜高出约三成，代价则是封装难度成倍上升。</div>
+            <p class="src">来源：观察者网（<a href="https://www.toutiao.com/article/7683376728194023974" target="_blank">toutiao.com</a>）</p>
+            <div class="pageno">— 14 —</div>
+          </div>
+        </div>
+        <div class="face back">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 晚间版</div>
+            <div class="news-no">15</div>
+            <h2 class="news-t">年捕80万吨：荷兰氨厂碳捕集设施投运，二氧化碳运往海底封存</h2>
+            <p class="news-b">挪威 Yara 公司在其荷兰氨与化肥工厂启用一套碳捕集设施，设计能力为每年捕集并液化最多 80 万吨二氧化碳。捕集到的二氧化碳将通过船舶运往挪威 Northern Lights 项目，进行海上永久封存。</p>
+            <div class="watch"><b>观此：</b>化工厂的碳排放有个特点：它不是燃烧产生的，而是化学反应本身的产物，因此没法靠更换能源解决，只能捕集。这套设施真正的看点在于它不是孤岛——捕集、液化、船运、封存被串成一条跨境产业链，用的是共享的运输与封存基础设施。把重资产环节交给专业网络的模式，可能比每个工厂各自为战更接近可复制的答案。</div>
+            <p class="src">来源：Climate Central Intelligence（<a href="https://centralintelligence.co/climate/briefings/20260909" target="_blank">centralintelligence.co</a>）</p>
+            <div class="pageno">— 15 —</div>
+          </div>
+        </div>
+      </div>
+      <!-- ===== leaf 9：新闻16 / 新闻17 ===== -->
+      <div class="leaf">
+        <div class="face front">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 晚间版</div>
+            <div class="news-no">16</div>
+            <h2 class="news-t">全球首条：小鹏人形机器人自动化产线启用，年底规模量产</h2>
+            <p class="news-b">小鹏汽车宣布人形机器人生产线正式启用，高阶通用人形机器人完成自动化总装并自主走下产线。该产线由小鹏自主设计、正向开发，将汽车工业成熟的质量体系与人形机器人精密制造深度融合，核心制程自动化率超过 80%。据悉该机器人具备 76 个自由度，搭载 3 颗自研图灵芯片，计划年底进入规模量产阶段，2027 年面向用户交付。</p>
+            <div class="watch"><b>观此：</b>全球首条高阶通用人形机器人自动化产线这个说法里，最关键的词是自动化率八成——造机器人的活儿主要交给机器来做，才谈得上规模量产和成本下降。把汽车工业的质量体系移植过来也是条捷径，人形机器人的关节、线束、热管理本就与汽车同源。机器人自主走下产线这一幕既是仪式也是验收：它至少证明本体已经能稳定直立行走。</div>
+            <p class="src">来源：比特网（<a href="https://www.toutiao.com/article/7683442950512165428" target="_blank">toutiao.com</a>）</p>
+            <div class="pageno">— 16 —</div>
+          </div>
+        </div>
+        <div class="face back">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 晚间版</div>
+            <div class="news-no">17</div>
+            <h2 class="news-t">3B参数让两台机器人一起挂裤子：芝诺发布 Zeno-1 具身基础模型</h2>
+            <p class="news-b">芝诺发布 Zeno-1，一个 3B 参数的多机器人协作具身基础模型，支持本地 30Hz 视觉-运动闭环。据介绍，两台机器人可在该模型驱动下自主协作完成挂裤子、装枕头等需要配合的柔性操作任务。</p>
+            <div class="watch"><b>观此：</b>挂裤子这个任务听着琐碎，对机器人却是硬骨头——布料会变形，两件衣服叠在一起分不清边界，还得两台机器配合着拉伸与对位。3B 的小模型能在本地跑 30Hz 闭环，说明具身智能正开始摆脱对云端大模型的依赖，反应速度和断网可用性都更贴近真实场景。多机协作则是由单机演示走向班组作业的必经一步。</div>
+            <p class="src">来源：东方财富财富号（<a href="https://caifuhao.eastmoney.com/news/20260909091738910912140" target="_blank">caifuhao.eastmoney.com</a>）</p>
+            <div class="pageno">— 17 —</div>
+          </div>
+        </div>
+      </div>
+      <!-- ===== leaf 10：新闻18 / 新闻19 ===== -->
+      <div class="leaf">
+        <div class="face front">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 晚间版</div>
+            <div class="news-no">18</div>
+            <h2 class="news-t">3500亿颗：Arm 架构芯片累计出货跨过新里程碑</h2>
+            <p class="news-b">Arm 执行副总裁兼首席商务官 Will Abbey 表示，全球合作伙伴累计出货的基于 Arm 技术的芯片已超过 3500 亿颗。他同时提到，随着产业加速迈向智能体时代，Arm 正依托覆盖云、边缘与物理应用的统一计算平台及不断壮大的软件生态，携手中国合作伙伴推进创新成果落地。</p>
+            <div class="watch"><b>观此：</b>3500 亿颗是个难以直观感受的量级，摊到全球人口相当于每人五十多颗。它说明一件事：算力真正铺开的地方不是数据中心，而是身边那些不显眼的设备——家电、电表、汽车、传感器。当智能体要进入物理世界，比拼的就不是单颗芯片的峰值算力，而是这套架构能不能在极低功耗下被海量部署，Arm 的优势恰好在这里。</div>
+            <p class="src">来源：比特网（<a href="https://www.toutiao.com/article/7683442950512165428" target="_blank">toutiao.com</a>）</p>
+            <div class="pageno">— 18 —</div>
+          </div>
+        </div>
+        <div class="face back">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 晚间版</div>
+            <div class="news-no">19</div>
+            <h2 class="news-t">近30国使馆同台：第十一届炫彩世界在首钢园开幕</h2>
+            <p class="news-b">9月9日，第十一届炫彩世界文化展示交流活动在首钢园 7 号馆开幕。该活动是 2026 年中国国际服务贸易交易会文旅专题展中国际元素最为丰富的板块，以四海同台、炫彩无限为主题，来自亚洲、非洲、欧洲、北美洲等地区的近 30 个国家驻华使馆及国际组织参展参会。开幕式上，来自叙利亚、尼泊尔、塞内加尔、摩洛哥、乌干达等国的艺术家带来了具有本国特色的乐器与舞蹈表演。</p>
+            <div class="watch"><b>观此：</b>这类活动的价值常被低估。它不产出科研成果，也不签下大额订单，但把三十个国家的使馆、手工艺与舞台放进同一个空间，本身就是一种降低理解成本的方式——很多人对远方的第一印象，正是从一支没听过的乐器或一件没见过的织物开始的。办到第十一届仍保持这样的国际参与度，说明文化展区已是服贸会里一个稳定的固定节目。</div>
+            <p class="src">来源：央广网（<a href="https://news.qq.com/rain/a/20260909A0DT4P00" target="_blank">news.qq.com</a>）</p>
+            <div class="pageno">— 19 —</div>
+          </div>
+        </div>
+      </div>
+      <!-- ===== leaf 11：新闻20 / 封底 ===== -->
+      <div class="leaf">
+        <div class="face front">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 晚间版</div>
+            <div class="news-no">20</div>
+            <h2 class="news-t">牛津剑桥划进秦淮河：南京国际赛艇公开赛41支队伍集结</h2>
+            <p class="news-b">9月9日，2026 南京·大学生国际赛艇公开赛新闻发布会在南京大学鼓楼校区举行。本届赛事步入第四届，依旧择址南京外秦淮河，参赛高校 34 所、参赛总人数达 369 人，汇集牛津大学、剑桥大学、悉尼大学、北京大学、清华大学、南京大学、东南大学等 41 支高校队伍。国内组设男子 1000 米竞速赛与 3000 米追逐赛，国际组分设男女 1000 米竞速赛与陆上赛艇 4×500 米接力赛。</p>
+            <div class="watch"><b>观此：</b>一条六朝古都的河上，牛津剑桥与清华北大同场划桨，这个画面本身就说明赛艇这项运动在中国的扩散方式——它先进入高校，再由高校把它变成城市活动。369 人、41 支队伍的规模较去年明显增长，而配套的大报恩寺、阅江楼与老门东游览，则把赛事延伸成了文旅体验。体育搭台、城市唱戏，这套模式南京已经跑到第四届，越跑越熟练。</div>
+            <p class="src">来源：现代快报（<a href="https://www.toutiao.com/article/7683461835961451044/" target="_blank">toutiao.com</a>）</p>
+            <div class="pageno">— 20 —</div>
+          </div>
+        </div>
+        <div class="face back back-cover">
+          <div class="pad">
+            <div class="end-big">本期完</div>
+            <div class="end-sub">
+              <span class="disc">纯新闻叙事</span><br>
+              我们坚持纯新闻叙事——只呈现事实<br>
+              与新闻价值，把研究分析留给您自己<br><br>
+              全球重要动态 · 2026-09-09<br>
+              翻动书页，用十分钟把握今日世界的多重注脚
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="nav">
+  <button id="prev" title="上一页（←）">‹</button>
+  <div class="pg" id="pg">1 / 13</div>
+  <button id="next" title="下一页（→）">›</button>
+</div>
+
+<script>
+  const book = document.getElementById('book');
+  const leaves = Array.from(book.querySelectorAll('.leaf'));
+  const N = leaves.length;            // 12 张书页
+  const TOTAL = N + 1;                // 13 个可视跨页（桌面）
+  let flipped = 0;
+  let mobileMode = false;
+  let mobileIndex = 0;
+
+  // 手机单页模式：12 张书页 × 2 面 = 24 个单页
+  const FACES = [];
+  leaves.forEach((lf, i) => {
+    FACES.push({leaf: i, face: 'front'});
+    FACES.push({leaf: i, face: 'back'});
+  });
+
+  function isMobile(){ return window.innerWidth <= 760; }
+
+  function updateDesktop(){
+    leaves.forEach((lf, i) => {
+      lf.style.zIndex = (i < flipped) ? (i + 1) : ((N + 100) - i);
+    });
+    document.getElementById('pg').textContent = (flipped + 1) + ' / ' + TOTAL;
+    document.getElementById('prev').disabled = (flipped <= 0);
+    document.getElementById('next').disabled = (flipped >= N);
+  }
+
+  function updateMobile(){
+    leaves.forEach(lf => lf.classList.remove('mobile-active','show-front','show-back'));
+    const f = FACES[mobileIndex];
+    const lf = leaves[f.leaf];
+    lf.classList.add('mobile-active', f.face === 'front' ? 'show-front' : 'show-back');
+    document.getElementById('pg').textContent = (mobileIndex + 1) + ' / ' + FACES.length;
+    document.getElementById('prev').disabled = (mobileIndex <= 0);
+    document.getElementById('next').disabled = (mobileIndex >= FACES.length - 1);
+  }
+
+  function refresh(){
+    mobileMode = isMobile();
+    const hint = document.getElementById('hint');
+    if(mobileMode){
+      leaves.forEach(lf => { lf.style.transform = ''; lf.style.zIndex = ''; });
+      updateMobile();
+      if(hint) hint.textContent = '📖 点击左右两侧或左右滑动翻页 · 共 ' + FACES.length + ' 页';
+    } else {
+      leaves.forEach(lf => lf.classList.remove('mobile-active','show-front','show-back'));
+      updateDesktop();
+      if(hint) hint.textContent = '📖 点击书页左右两侧 或 使用键盘 ← → 翻页 · 共 ' + TOTAL + ' 张';
+    }
+  }
+
+  function goNext(){
+    if(mobileMode){
+      if(mobileIndex >= FACES.length - 1) return;
+      mobileIndex++;
+      updateMobile();
+    } else {
+      if(flipped >= N) return;
+      const lf = leaves[flipped];
+      lf.style.zIndex = 9999;
+      lf.style.transform = 'rotateY(-180deg)';
+      flipped++;
+      setTimeout(updateDesktop, 920);
+    }
+  }
+
+  function goPrev(){
+    if(mobileMode){
+      if(mobileIndex <= 0) return;
+      mobileIndex--;
+      updateMobile();
+    } else {
+      if(flipped <= 0) return;
+      flipped--;
+      const lf = leaves[flipped];
+      lf.style.zIndex = 9999;
+      lf.style.transform = 'rotateY(0deg)';
+      setTimeout(updateDesktop, 920);
+    }
+  }
+
+  book.addEventListener('click', (e) => {
+    const r = book.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width;
+    if(mobileMode){
+      // 手机：点左侧 30% 上一页，右侧 30% 下一页，中间区域留给点击链接
+      if(x < 0.3) goPrev();
+      else if(x > 0.7) goNext();
+    } else {
+      if(x < 0.5) goPrev(); else goNext();
+    }
+  });
+
+  // 手机触摸滑动翻页
+  let touchStartX = null;
+  book.addEventListener('touchstart', (e) => {
+    touchStartX = e.touches[0].clientX;
+  }, {passive:true});
+  book.addEventListener('touchend', (e) => {
+    if(touchStartX === null) return;
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if(Math.abs(dx) > 50){
+      if(dx < 0) goNext(); else goPrev();
+    }
+    touchStartX = null;
+  }, {passive:true});
+
+  document.getElementById('next').addEventListener('click', (e) => { e.stopPropagation(); goNext(); });
+  document.getElementById('prev').addEventListener('click', (e) => { e.stopPropagation(); goPrev(); });
+  window.addEventListener('keydown', (e) => {
+    if(e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') goNext();
+    if(e.key === 'ArrowLeft' || e.key === 'ArrowUp') goPrev();
+  });
+
+  // 自适应缩放：桌面保持缩放，手机不缩放
+  function fit(){
+    const wrap = document.getElementById('scaleWrap');
+    if(mobileMode){ wrap.style.transform = ''; return; }
+    const avail = window.innerWidth - 24;
+    const s = Math.min(1, avail / (940 + 40));
+    wrap.style.transform = 'scale(' + s + ')';
+  }
+
+  // 支持 URL 直达某页：?page=5（第 5 页），手机和桌面均生效
+  function initFromUrl(){
+    const m = location.search.match(/[?&]page=(\d+)/);
+    if(!m) return;
+    const n = Math.max(1, parseInt(m[1], 10)) - 1;
+    if(mobileMode){
+      mobileIndex = Math.max(0, Math.min(n, FACES.length - 1));
+      updateMobile();
+    } else {
+      flipped = Math.max(0, Math.min(n, N));
+      updateDesktop();
+    }
+  }
+
+  window.addEventListener('resize', () => { refresh(); fit(); });
+
+  refresh();
+  fit();
+  initFromUrl();
+</script>
+</body>
+</html>
