@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>全球重要动态 · 2026-09-13 早间版（翻页杂志）</title>
+<style>
+  :root{
+    --paper:#f6f1e6;
+    --ink:#211d18;
+    --muted:#7a6f60;
+    --red:#9e1b1b;
+    --rule:#2a2620;
+    --box:#ebe0c8;
+    --boxline:#d8c9a9;
+    --dark1:#1b2330;
+    --dark2:#0e131d;
+    --gold:#c8a24a;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:radial-gradient(1200px 700px at 50% -10%, #34302a 0%, #211e19 55%, #16140f 100%);
+    font-family:"Noto Serif SC","Source Han Serif SC","Songti SC","SimSun",Georgia,serif;
+    color:var(--ink);
+    line-height:1.75;
+    -webkit-font-smoothing:antialiased;
+  }
+  .stage{
+    min-height:100vh;
+    display:flex;flex-direction:column;align-items:center;
+    padding:26px 12px 96px;
+  }
+  .hint{
+    color:#cfc4ad;font-size:13px;letter-spacing:.08em;margin:0 0 18px;opacity:.8;
+  }
+  .scaleWrap{transform-origin:top center;}
+  .book{
+    position:relative;width:940px;height:700px;
+    perspective:2600px;transform-style:preserve-3d;
+    filter:drop-shadow(0 24px 50px rgba(0,0,0,.55));
+  }
+  .leaf{
+    position:absolute;top:0;left:470px;width:470px;height:700px;
+    transform-origin:left center;transform-style:preserve-3d;
+    transform:rotateY(0deg);
+    transition:transform .9s cubic-bezier(.55,.08,.2,1);
+  }
+  .face{
+    position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;
+    border:1px solid #cabd9f;overflow:hidden;
+    display:flex;flex-direction:column;
+  }
+  .front{transform:rotateY(0deg);background:var(--paper);}
+  .back{transform:rotateY(180deg);background:var(--paper);}
+  .pad{padding:30px 28px;flex:1;display:flex;flex-direction:column;}
+
+  .folio{font-size:11px;letter-spacing:.22em;color:var(--muted);text-transform:uppercase;
+    border-bottom:1px solid var(--boxline);padding-bottom:7px;margin-bottom:14px;}
+
+  /* 新闻页 */
+  .news-no{font-size:44px;font-weight:700;color:var(--red);line-height:.85;font-variant-numeric:tabular-nums;}
+  .news-t{font-size:21px;font-weight:700;line-height:1.35;margin:10px 0 14px;}
+  .news-b{font-size:14.5px;line-height:1.85;text-align:justify;margin:0 0 14px;flex:1;}
+  .watch{background:var(--box);border-left:4px solid var(--red);padding:9px 12px;font-size:13px;line-height:1.7;margin:0 0 10px;}
+  .watch b{color:var(--red);margin-right:3px;}
+  .src{font-size:12px;color:var(--muted);line-height:1.6;}
+  .src a{color:#3a5e8c;text-decoration:none;border-bottom:1px dotted #3a5e8c;word-break:break-all;}
+  .src a:hover{color:var(--red);}
+  .pageno{text-align:center;font-size:11px;color:var(--muted);letter-spacing:.35em;margin-top:10px;}
+
+  /* 卷首 / 目录 / 封底 */
+  .sec-h{font-size:25px;font-weight:700;margin:4px 0 16px;border-bottom:2px solid var(--rule);padding-bottom:9px;}
+  .lead-p{font-size:15px;line-height:1.95;text-align:justify;margin:0 0 14px;}
+  .lead-note{font-size:13.5px;line-height:1.9;color:#3a342b;background:var(--box);padding:12px 14px;border-left:4px solid var(--red);}
+  .toc{columns:2;column-gap:22px;font-size:11.5px;line-height:1.35;padding-left:18px;margin:0;}
+  .toc li{margin-bottom:5px;break-inside:avoid;}
+  .toc li::marker{color:var(--red);font-weight:700;font-variant-numeric:tabular-nums;}
+  .toc li span{display:none;}
+  .contents-pad{padding:18px 22px 32px;}
+  .contents-pad .folio{margin-bottom:6px;}
+  .contents-pad .sec-h{margin:0 0 6px;padding-bottom:6px;}
+  .contents-pad .pageno{margin-top:2px;}
+  .disc{color:var(--red);font-weight:700;}
+  .end-box{border:1px solid var(--boxline);padding:14px;font-size:13px;line-height:1.85;background:var(--box);}
+
+  /* 封面 */
+  .cover{
+    background:
+      radial-gradient(700px 500px at 50% 18%, rgba(60,80,120,.35), transparent 60%),
+      linear-gradient(160deg,#202a3b 0%, #131a26 55%, #0c111a 100%);
+    color:#f1e9d6;border-color:#3a455c;
+  }
+  .cover-in{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:34px;}
+  .cover-top{font-size:12px;letter-spacing:.5em;color:var(--gold);text-transform:uppercase;margin-bottom:26px;}
+  .cover-title{font-size:62px;font-weight:700;letter-spacing:.14em;line-height:1.15;margin:0;
+    text-shadow:0 2px 18px rgba(200,162,74,.35);}
+  .cover-rule{width:120px;height:2px;background:var(--gold);margin:26px 0 20px;opacity:.8;}
+  .cover-sub{font-size:15px;letter-spacing:.32em;color:#d9cfb6;}
+  .cover-foot{position:absolute;bottom:30px;left:0;right:0;text-align:center;
+    font-size:12px;letter-spacing:.18em;color:#b8ad94;}
+
+  /* 封底 */
+  .back-cover{
+    background:linear-gradient(160deg,#202a3b 0%, #131a26 100%);
+    color:#f1e9d6;border-color:#3a455c;
+  }
+  .back-cover .pad{align-items:center;justify-content:center;text-align:center;}
+  .back-cover .end-big{font-size:40px;font-weight:700;letter-spacing:.2em;color:#f1e9d6;margin:0 0 18px;}
+  .back-cover .end-sub{font-size:13px;letter-spacing:.18em;color:#b8ad94;line-height:2;}
+
+  /* 导航（透明浮层，不遮挡正文） */
+  .nav{position:fixed;bottom:0;left:0;right:0;height:62px;background:rgba(18,16,13,.48);
+    display:flex;align-items:center;justify-content:center;gap:22px;z-index:60;
+    border-top:1px solid rgba(200,162,74,.18);backdrop-filter:blur(8px);pointer-events:none;}
+  .nav button{pointer-events:auto;background:transparent;border:1px solid rgba(200,162,74,.55);color:#e8e0cf;
+    font-size:22px;width:46px;height:38px;border-radius:8px;cursor:pointer;
+    font-family:inherit;transition:.2s;display:flex;align-items:center;justify-content:center;}
+  .nav button:hover{background:rgba(200,162,74,.25);border-color:var(--gold);}
+  .nav button:disabled{opacity:.35;cursor:default;}
+  .nav .pg{color:#f5efe3;font-size:14px;letter-spacing:.12em;min-width:96px;text-align:center;
+    text-shadow:0 1px 4px rgba(0,0,0,.55);}
+
+  @media (max-width:760px){
+    .hint{
+      position:fixed;top:0;left:0;right:0;z-index:70;
+      font-size:12px;margin:0;padding:10px 14px;
+      background:rgba(18,16,13,.60);color:#cfc4ad;
+      text-align:center;letter-spacing:.04em;
+      backdrop-filter:blur(6px);border-bottom:1px solid rgba(200,162,74,.2);
+    }
+    .stage{
+      position:fixed;inset:0;padding:0;display:block;overflow:hidden;
+      background:radial-gradient(1200px 700px at 50% -10%, #34302a 0%, #211e19 55%, #16140f 100%);
+    }
+    .scaleWrap{transform:none !important;width:100vw;height:100vh;}
+    .book{
+      position:absolute;inset:0;width:100vw;height:100vh;
+      perspective:none;transform-style:flat;filter:none;
+    }
+    .leaf{
+      position:absolute;inset:0;width:100vw;height:100vh;left:0 !important;
+      opacity:0;pointer-events:none;z-index:0;
+      transform:none !important;transition:opacity .35s ease;
+    }
+    .leaf.mobile-active{opacity:1;pointer-events:auto;z-index:10;}
+    .leaf .face{display:none !important;position:absolute;inset:0;width:100%;height:100%;
+      transform:none !important;backface-visibility:visible;border:none;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+    .leaf.show-front .front{display:flex !important;}
+    .leaf.show-back .back{display:flex !important;}
+    .pad{padding:64px 22px 150px;}
+
+    .cover-in{padding:70px 26px 26px;}
+    .cover-top{font-size:13px;margin-bottom:22px;}
+    .cover-title{font-size:52px;}
+    .cover-sub{font-size:16px;letter-spacing:.22em;}
+    .cover-foot{bottom:110px;font-size:13px;}
+
+    .sec-h{font-size:28px;}
+    .lead-p{font-size:17px;line-height:2;}
+    .lead-note{font-size:15px;}
+    .toc{columns:2;column-gap:14px;padding-left:16px;font-size:11.5px;line-height:1.25;}
+    .toc li{margin-bottom:4px;break-inside:avoid;}
+    .toc li::marker{font-size:11.5px;}
+    .contents-pad{padding:64px 16px 170px;}
+    .contents-pad .folio{margin-bottom:4px;}
+    .contents-pad .sec-h{font-size:22px;margin:0 0 8px;padding-bottom:6px;}
+    .contents-pad .pageno{margin-top:auto;padding-top:10px;}
+
+    .news-no{font-size:58px;}
+    .news-t{font-size:25px;line-height:1.4;margin:12px 0 16px;}
+    .news-b{font-size:16px;line-height:2;}
+    .watch{font-size:14.5px;line-height:1.85;padding:12px 14px;}
+    .src{font-size:13px;line-height:1.75;}
+
+    .back-cover .end-big{font-size:48px;}
+    .back-cover .end-sub{font-size:15px;line-height:2.2;}
+
+    .nav{height:58px;gap:18px;}
+    .nav button{width:50px;height:40px;font-size:24px;}
+    .nav .pg{font-size:14px;min-width:76px;}
+  }
+</style>
+</head>
+<body>
+<div class="stage">
+  <p class="hint" id="hint">📖 点击书页左右两侧 或 使用键盘 ← → 翻页</p>
+  <div class="scaleWrap" id="scaleWrap">
+    <div class="book" id="book">
+
+      <!-- ===== leaf 0：封面 / 卷首语 ===== -->
+      <div class="leaf">
+        <div class="face front cover">
+          <div class="cover-in">
+            <div class="cover-top">Global Daily Brief</div>
+            <h1 class="cover-title">全球<br>重要动态</h1>
+            <div class="cover-rule"></div>
+            <div class="cover-sub">一日廿事 · 纯新闻叙述</div>
+            <div class="cover-foot">2026 年 9 月 13 日　星期日 · 早间版</div>
+          </div>
+        </div>
+        <div class="face back">
+          <div class="pad">
+            <div class="folio">卷首语 · Foreword</div>
+            <h2 class="sec-h">致读者</h2>
+            <p class="lead-p">一觉醒来，世界又发生了哪些大事？本期为您精选 <b>20 条</b> 值得关注的全球动态，覆盖灾害救援、地缘博弈、AI 算力、航天探索、产业政策和民生医疗。</p>
+            <p class="lead-p">我们坚持<b>纯新闻叙事</b>——只呈现事实与新闻价值，把研究分析留给您自己。翻动书页，用十分钟把握昨夜今晨的世界。</p>
+            <div class="lead-note">本期聚焦：AI算力狂飙与科技自律</div>
+            <div class="pageno">— 卷首 —</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== leaf 1：目录 / 新闻01 ===== -->
+      <div class="leaf">
+        <div class="face front">
+          <div class="pad contents-pad">
+            <div class="folio">目录 · Contents</div>
+            <h2 class="sec-h">本期目录</h2>
+            <ol class="toc">
+              <li>AI词元需求爆发</li>
+              <li>Anthropic与英伟达合作</li>
+              <li>中国算力大会成果</li>
+              <li>DeepSeek灰度测试AI语音</li>
+              <li>“支付宝假App”事件</li>
+              <li>菲尔兹奖得主警告AI错位</li>
+              <li>中国天眼FAST发布数据</li>
+              <li>华为Mate XT 2首销</li>
+              <li>外卖新规实施</li>
+              <li>高校买商品房改造学生宿舍</li>
+              <li>深圳对金砖成员国进出口增长</li>
+              <li>国家自然科学基金联合基金启动</li>
+              <li>美联储加息预期</li>
+              <li>霍尔木兹海峡油轮保护</li>
+              <li>桥水警告AI风险</li>
+              <li>电力板块走强</li>
+              <li>农业保险覆盖</li>
+              <li>扶持AI产业政策</li>
+              <li>深圳算力需求增长</li>
+              <li>中兴国产高性能集群</li>
+            </ol>
+            <div class="pageno">— 目录 —</div>
+          </div>
+        </div>
+        <div class="face back">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">01</div>
+            <h2 class="news-t">AI词元需求爆发</h2>
+            <p class="news-b">中国电信研究院发布的《智能体时代AI基础设施发展研究报告(2026)》显示，我国词元需求呈现爆发式增长。预计2026年我国词元年消耗量将达到10亿亿，到2030年将超过3500亿亿，年复合增长率接近12倍。随着人工智能产业发展重心从大模型和算力竞争转向智能体规模落地、应用变现，词元作为智能体处理信息的基本单位，其消耗量激增反映了AI技术正在从实验室走向大规模产业应用。</p>
+            <div class="watch"><b>观此：</b>从10亿亿到3500亿亿，这组数据背后是智能体时代算力需求的指数级跃升。词元消耗量的激增意味着AI系统处理的信息量在呈几何级数增长，这对底层算力基础设施提出了前所未有的挑战。同时，这也预示着AI应用场景正在从单一任务向复杂多任务扩展，智能体不再是孤立的模型，而是需要持续输入输出的系统。中国电信研究院的报告为我们描绘了一幅AI基础设施快速演进的前景图景。</div>
+            <p class="src">来源：中国电信研究院（<a href="https://news.qq.com/rain/a/20260913A02WIA00" target="_blank">news.qq.com</a>）</p>
+            <div class="pageno">— 01 —</div>
+          </div>
+        </div>
+      </div>
+      <!-- ===== leaf 2：新闻02 / 新闻03 ===== -->
+      <div class="leaf">
+        <div class="face front">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">02</div>
+            <h2 class="news-t">Anthropic与英伟达合作</h2>
+            <p class="news-b">Anthropic正与英伟达洽谈，希望引进后者成为该公司IPO锚定投资者。Anthropic的IPO规模料将创史上之最，知情人士称计划筹集高达1000亿美元资金，公司估值将达约2万亿美元。消息显示，英伟达正考虑在本次IPO中投资至多100亿美元。Anthropic首席执行官达里奥·阿莫迪表示，人工智能行业必须放慢新模型的开发速度，理由是对人类风险日益担忧。</p>
+            <div class="watch"><b>观此：</b>1000亿美元IPO规模、2万亿美元估值，这两个数字背后是AI行业资本盛宴的延续。英伟达作为AI芯片霸主，选择参投Anthropic的IPO，既是对AI技术前景的信心，也是布局AI产业链的重要一步。值得注意的是，CEO呼吁放慢模型开发速度，这反映出行业在追求技术突破与控制风险之间的平衡。对于投资者而言，AI巨头的资本运作既是机遇也是警示。</div>
+            <p class="src">来源：财联社（<a href="https://www.toutiao.com/article/7684793022952866304/" target="_blank">toutiao.com</a>）</p>
+            <div class="pageno">— 02 —</div>
+          </div>
+        </div>
+        <div class="face back">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">03</div>
+            <h2 class="news-t">中国算力大会成果</h2>
+            <p class="news-b">中国算力大会“年度重大突破成果”正式揭晓，15项具有示范性意义的技术成果集中亮相。其中，长飞空芯光纤算力互联技术创下最低衰减0.04dB/km、最长拉丝91.2公里等世界纪录，已在国内外完成超过13个商用及试点项目。中兴国产高性能Matrix集群超节点将芯片适配周期压缩至3至6个月，大幅提升了算力基础设施的部署效率。</p>
+            <div class="watch"><b>观此：</b>从空芯光纤到Matrix集群，中国算力基础设施正在从跟跑向并跑甚至领跑转变。长飞空芯光纤的技术突破，为高密度算力互联提供了新的解决方案，其极低的衰减率意味着更高效的数据传输。而芯片适配周期的压缩，则直接降低了算力基础设施的部署成本和时间。这些成果的落地应用，标志着中国算力大会不仅停留在展示层面，更在推动技术产业化进程。</div>
+            <p class="src">来源：财联社（<a href="https://news.qq.com/rain/a/20260913A02WIA00" target="_blank">news.qq.com</a>）</p>
+            <div class="pageno">— 03 —</div>
+          </div>
+        </div>
+      </div>
+      <!-- ===== leaf 3：新闻04 / 新闻05 ===== -->
+      <div class="leaf">
+        <div class="face front">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">04</div>
+            <h2 class="news-t">DeepSeek灰度测试AI语音</h2>
+            <p class="news-b">DeepSeek灰度测试AI语音对话功能，支持四种音色。据IT之家小伙伴反馈，DeepSeek的设置页面会出现一个“朗读音色”选项，用户可以选择四种音色。这标志着DeepSeek在多模态交互方面迈出了重要一步，从文本对话扩展到语音交互，为用户提供了更丰富的使用场景。</p>
+            <div class="watch"><b>观此：</b>从文本到语音，AI交互方式正在变得更加自然和多元。DeepSeek的语音对话功能，不仅提升了用户体验，也为AI在客服、教育、陪伴等领域的应用打开了新的可能性。四种音色的选择，体现了对用户个性化需求的关注。在多模态AI日益普及的今天，语音交互已成为重要的竞争维度，DeepSeek的这次尝试，有望在AI语音助手领域占据一席之地。</div>
+            <p class="src">来源：IT之家（<a href="https://www.sohu.com/a/1075375709_114760" target="_blank">sohu.com</a>）</p>
+            <div class="pageno">— 04 —</div>
+          </div>
+        </div>
+        <div class="face back">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">05</div>
+            <h2 class="news-t">“支付宝假App”事件</h2>
+            <p class="news-b">有开发者制作高仿应用，可随意填写金额伪造上亿转账截图。支付宝安全中心提醒网友注意甄别，并建议通过官方渠道下载、警惕转账截图陷阱，商家以实际到账为准。这一事件再次敲响了移动支付安全警钟，提醒用户在享受便捷支付的同时，也要提高安全防范意识。</p>
+            <div class="watch"><b>观此：</b>高仿应用能够伪造转账截图，反映出移动支付安全防护仍面临严峻挑战。虽然支付宝等平台一直在加强安全机制，但技术手段的升级也催生了新的安全风险。这一事件提醒我们，在数字化支付日益普及的今天，用户的安全意识与平台的技术防护同样重要。对于开发者而言，恶意伪造应用不仅违法，也会损害整个行业的信任基础。</div>
+            <p class="src">来源：支付宝安全中心（<a href="https://www.sohu.com/a/1075375709_114760" target="_blank">sohu.com</a>）</p>
+            <div class="pageno">— 05 —</div>
+          </div>
+        </div>
+      </div>
+      <!-- ===== leaf 4：新闻06 / 新闻07 ===== -->
+      <div class="leaf">
+        <div class="face front">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">06</div>
+            <h2 class="news-t">菲尔兹奖得主警告AI错位</h2>
+            <p class="news-b">当地时间9月11日，陶哲轩、邓煜、彼得·舒尔茨等25位菲尔兹奖得主作为最初签署人，联合发表声明《人工智能在数学中的严重错位》，警告AI公司与数学共同体之间正在出现“严重错位”。声明呼吁加强AI与数学共同体的对齐，确保AI技术的发展方向与人类价值相一致。</p>
+            <div class="watch"><b>观此：</b>25位菲尔兹奖得主的联合警告，凸显了AI与数学共同体之间可能存在的认知鸿沟。数学作为AI训练的重要基础，其理论框架与AI的实际应用之间出现错位，可能会限制AI在科学计算、理论验证等领域的潜力。这一事件也反映出，AI技术发展不仅需要工程层面的突破，更需要与学术共同体建立更深层次的对话与对齐机制。</div>
+            <p class="src">来源：数学共同体（<a href="https://www.sohu.com/a/1075375709_114760" target="_blank">sohu.com</a>）</p>
+            <div class="pageno">— 06 —</div>
+          </div>
+        </div>
+        <div class="face back">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">07</div>
+            <h2 class="news-t">中国天眼FAST发布数据</h2>
+            <p class="news-b">由中国科学院国家天文台研究团队牵头的“中国天眼FAST中性氢巡天项目”发布第二期数据集，构建起当今世界规模最大的中性氢星系样本库。“中国天眼”是一台口径达500米的球面射电望远镜，它是中国得以在天文学领域取得众多发现的利器之一。这一数据集的发布，将为星系形成与演化研究提供重要数据支持。</p>
+            <div class="watch"><b>观此：</b>世界最大的中性氢星系样本库，这是中国天文学界的一项重大突破。中性氢是宇宙中最丰富的元素之一，其分布直接反映了星系的结构与演化过程。FAST望远镜的数据发布，不仅提升了我国在天文学研究领域的国际影响力，也为全球天文学界提供了宝贵的数据资源。从“中国天眼”到“世界样本库”，这一转变标志着中国正在从天文观测大国向天文研究强国迈进。</div>
+            <p class="src">来源：中国科学院国家天文台（<a href="https://www.toutiao.com/article/7684793022952866304/" target="_blank">toutiao.com</a>）</p>
+            <div class="pageno">— 07 —</div>
+          </div>
+        </div>
+      </div>
+      <!-- ===== leaf 5：新闻08 / 新闻09 ===== -->
+      <div class="leaf">
+        <div class="face front">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">08</div>
+            <h2 class="news-t">华为Mate XT 2首销</h2>
+            <p class="news-b">华为三折叠新机华为Mate XT 2非凡大师10:08开启全渠道首销，售价19999元起。据华为商城显示，华为Mate XT 2非凡大师开售即售罄，各个配色及版本均已断货。这显示市场对高端折叠手机的强烈需求，也反映出华为在折叠屏技术领域的持续领先地位。</p>
+            <div class="watch"><b>观此：</b>开售即售罄，19999元起售价，华为Mate XT 2用市场表现证明高端折叠屏手机的可行性。三折叠设计相比双折叠在展开面积上更具优势，能够提供更大的显示区域，同时保持便携性。华为在折叠屏技术上的持续投入，不仅巩固了其在高端手机市场的地位，也为行业提供了新的创新方向。对于消费者而言，这意味着更多样化的选择和更丰富的交互体验。</div>
+            <p class="src">来源：华为商城（<a href="https://www.toutiao.com/article/7684793022952866304/" target="_blank">toutiao.com</a>）</p>
+            <div class="pageno">— 08 —</div>
+          </div>
+        </div>
+        <div class="face back">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">09</div>
+            <h2 class="news-t">外卖新规实施</h2>
+            <p class="news-b">今年6月1日起，《网络餐饮服务经营者落实食品安全主体责任监督管理规定》已施行，倡导推行“互联网 + 明厨亮灶”，让消费者可以实时观看商家后厨直播。央视探访看到，外卖新规实施三个月后，店员徒手抓烤鸡等现象已得到明显改善，明厨亮灶摄像头对着天花板等问题也已解决。</p>
+            <div class="watch"><b>观此：</b>从“看不见”到“看得见”，外卖新规的实施正在推动餐饮行业向透明化、规范化发展。“互联网+明厨亮灶”不仅提升了消费者的信任度，也倒逼商家提升后厨管理水平。央视的探访报道显示，新规实施三个月后效果显著，这为类似领域的监管提供了有益借鉴。食品安全是餐饮行业的生命线，技术手段与监管政策的结合，正在让“吃得放心”从口号变为现实。</div>
+            <p class="src">来源：央视新闻（<a href="https://www.sohu.com/a/1075375709_114760" target="_blank">sohu.com</a>）</p>
+            <div class="pageno">— 09 —</div>
+          </div>
+        </div>
+      </div>
+      <!-- ===== leaf 6：新闻10 / 新闻11 ===== -->
+      <div class="leaf">
+        <div class="face front">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">10</div>
+            <h2 class="news-t">高校买商品房改造学生宿舍</h2>
+            <p class="news-b">湖北大学购置校园周边存量商品房，将与阳逻校区一路之隔的武汉城建·水岸的一些房源改造为学生公寓，成为高校收购周边商品房改造学生公寓的全国首个案例。双人间一年1320元，空调洗衣机齐全，这一模式为解决高校学生住宿问题提供了新的思路。</p>
+            <div class="watch"><b>观此：</b>高校买商品房改宿舍，这在全国还是首个案例。1320元/年的双人间价格，相比传统校内宿舍的租金水平有明显优势，同时配套设施齐全，解决了学生住宿的实际需求。这一模式的核心在于市场化运作与公益性的结合，既盘活了存量房产，又降低了学生住宿成本。对于其他高校而言，这一案例提供了可复制的经验，有望在更多城市推广。</div>
+            <p class="src">来源：湖北大学（<a href="https://www.sohu.com/a/1075375709_114760" target="_blank">sohu.com</a>）</p>
+            <div class="pageno">— 10 —</div>
+          </div>
+        </div>
+        <div class="face back">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">11</div>
+            <h2 class="news-t">深圳对金砖成员国进出口增长</h2>
+            <p class="news-b">今年前8个月，深圳对其他金砖成员国进出口货值达2468.9亿元，同比增长11.5%；其中出口2077.7亿元，同比增长7.5%，进口391.2亿元，同比增长38.9%。深圳作为中国经济最活跃的城市之一，对金砖成员国的进出口增长，反映了区域经济合作的深化。</p>
+            <div class="watch"><b>观此：</b>对金砖成员国进出口双增长，进口增速远高于出口，说明深圳企业在金砖市场的采购需求在增加。38.9%的进口增速，可能意味着深圳在金砖市场的产业链整合能力在提升，既出口产品也进口关键资源。金砖合作机制的深化，为深圳企业拓展新兴市场提供了新的机遇。这一趋势也反映出，深圳作为开放型经济高地，正在更好地融入全球经济体系。</div>
+            <p class="src">来源：深圳海关（<a href="https://news.10jqka.com.cn/20260913/c679851133.shtml" target="_blank">news.10jqka.com.cn</a>）</p>
+            <div class="pageno">— 11 —</div>
+          </div>
+        </div>
+      </div>
+      <!-- ===== leaf 7：新闻12 / 新闻13 ===== -->
+      <div class="leaf">
+        <div class="face front">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">12</div>
+            <h2 class="news-t">国家自然科学基金联合基金启动</h2>
+            <p class="news-b">国家自然科学基金长三角基础研究联合基金重大专项正式启动，面向长三角区域重大战略需求支持应用导向的基础研究，探索三省一市“统一出资、联合出题、共同管理、同题共答”的协同机制，强化“产业出题、科技答题”。这一机制有望提升长三角基础研究的整体效率与影响力。</p>
+            <div class="watch"><b>观此：</b>统一出资、联合出题、共同管理、同题共答，这一机制创新打破了区域间的科研壁垒。长三角作为中国经济最发达的区域之一，其科研资源的整合与协同，将为区域创新体系的建设提供重要支撑。产业出题、科技答题的模式，直接对接了区域经济发展的实际需求，避免了科研与产业脱节的问题。这一联合基金的启动，有望催生一批解决实际问题的科研成果。</div>
+            <p class="src">来源：国家自然科学基金委员会（<a href="https://news.10jqka.com.cn/20260913/c679851133.shtml" target="_blank">news.10jqka.com.cn</a>）</p>
+            <div class="pageno">— 12 —</div>
+          </div>
+        </div>
+        <div class="face back">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">13</div>
+            <h2 class="news-t">美联储加息预期</h2>
+            <p class="news-b">《华尔街日报》汇总的20家机构中有16家预计美联储将在9月加息，占比80%。多数机构预计2026年累计加息50个基点，部分机构预计加息75个基点，市场对美联储政策路径的预期明显转向“更高、更久”。这一预期变化反映了全球经济形势的复杂性与美联储政策的不确定性。</p>
+            <div class="watch"><b>观此：</b>80%的机构预计9月加息，这一预期正在逐步转化为市场定价。加息预期的升温，可能意味着全球资本流动将面临新的压力，新兴市场国家需要警惕资本外流风险。对于中国而言，美联储政策的变化，既会影响汇率与资本流动，也会通过贸易渠道影响出口。在全球化背景下，美联储的政策调整，正在成为影响全球经济的重要变量。</div>
+            <p class="src">来源：华尔街日报（<a href="https://news.10jqka.com.cn/20260913/c679851133.shtml" target="_blank">news.10jqka.com.cn</a>）</p>
+            <div class="pageno">— 13 —</div>
+          </div>
+        </div>
+      </div>
+      <!-- ===== leaf 8：新闻14 / 新闻15 ===== -->
+      <div class="leaf">
+        <div class="face front">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">14</div>
+            <h2 class="news-t">霍尔木兹海峡油轮保护</h2>
+            <p class="news-b">美国将穿越霍尔木兹海峡油轮的军事保护通行窗口压缩为每日两个特定时段，船东需向美国航运海军协调中心提交申请，以获得航行坐标和美军战机防护。伊朗外交部表示，周一在阿曼举行的会议将重点敲定伊阿曼谅解备忘录，划定临时安全海上航线，但地区共识不代表战略水道能够实现全面、持久安全。</p>
+            <div class="watch"><b>观此：</b>通行窗口压缩至每日两个时段，这一调整显著增加了油轮通行的难度与不确定性。霍尔木兹海峡作为全球最重要的石油运输通道之一，其安全形势直接影响全球能源市场。美国与伊朗在该地区的博弈，正在通过军事手段与外交谈判双轨并行。对于全球航运业而言，这一地区的紧张局势，将继续是影响运价与保险成本的重要因素。</div>
+            <p class="src">来源：伊朗外交部（<a href="https://news.10jqka.com.cn/20260913/c679851133.shtml" target="_blank">news.10jqka.com.cn</a>）</p>
+            <div class="pageno">— 14 —</div>
+          </div>
+        </div>
+        <div class="face back">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">15</div>
+            <h2 class="news-t">桥水警告AI风险</h2>
+            <p class="news-b">桥水联席首席投资官Greg Jensen警告，当前人工智能热潮可能带来严重风险和后果，并将其类比为2020年2月疫情爆发初期，认为人类或许要等到出现严重伤害后才会采取行动。Anthropic首席执行官也表示，必须放缓提升AI模型能力的速度，以确保企业有充足时间进行模型对齐并保障安全。</p>
+            <div class="watch"><b>观此：</b>桥水将AI热潮比作疫情初期，这一比喻虽然极端，但并非没有道理。AI技术的快速发展，确实可能带来超出预期的社会影响，而人类往往在问题显现后才采取行动。AnthropicCEO呼吁放慢模型开发速度，这反映出行业内部对AI安全问题的担忧。在技术进步与风险控制之间寻找平衡，是AI行业必须面对的长期课题。</div>
+            <p class="src">来源：桥水基金（<a href="https://news.10jqka.com.cn/20260913/c679851133.shtml" target="_blank">news.10jqka.com.cn</a>）</p>
+            <div class="pageno">— 15 —</div>
+          </div>
+        </div>
+      </div>
+      <!-- ===== leaf 9：新闻16 / 新闻17 ===== -->
+      <div class="leaf">
+        <div class="face front">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">16</div>
+            <h2 class="news-t">电力板块走强</h2>
+            <p class="news-b">政策密集落地与行业基本面改善共同推动电力板块走强。随着新能源装机比例的提升，电力行业正经历从传统火电向清洁能源转型的关键期，政策支持与市场需求的双重驱动，为电力板块提供了长期增长动力。</p>
+            <div class="watch"><b>观此：</b>电力板块走强，背后是能源转型的时代大趋势。政策密集落地与行业基本面改善，说明电力行业正在从政策驱动向市场驱动转变。新能源装机的提升，为电力行业带来了新的增长点，同时也带来了消纳压力。电力板块的走强，不仅反映了市场对能源转型方向的信心，也预示着相关投资机会的增多。对于投资者而言，如何把握能源转型的节奏，将是关键问题。</div>
+            <p class="src">来源：经济日报（<a href="https://news.10jqka.com.cn/20260913/c679851133.shtml" target="_blank">news.10jqka.com.cn</a>）</p>
+            <div class="pageno">— 16 —</div>
+          </div>
+        </div>
+        <div class="face back">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">17</div>
+            <h2 class="news-t">农业保险覆盖</h2>
+            <p class="news-b">财政部等四部门联合印发《关于加快农业保险高质量发展的实施方案》，明确到2030年，基本建成多层次农业保险体系，稻谷、小麦、玉米三大粮食作物农业保险覆盖率稳定在90%左右。农业保险综合费用率不高于20%，这一目标的实现，将为农业生产提供更坚实的风险保障。</p>
+            <div class="watch"><b>观此：</b>三大粮食作物农业保险覆盖率90%左右，这一目标有望显著提升农业抗风险能力。农业作为国民经济的基础，其稳定性直接关系到粮食安全与农民增收。农业保险的普及，不仅能为农民提供风险保障，也能稳定农产品供给，保障市场平稳运行。这一政策的推进，体现了国家对农业发展的高度重视，也为农业现代化提供了制度支撑。</div>
+            <p class="src">来源：财政部（<a href="https://news.qq.com/rain/a/20260913A02WVM00" target="_blank">news.qq.com</a>）</p>
+            <div class="pageno">— 17 —</div>
+          </div>
+        </div>
+      </div>
+      <!-- ===== leaf 10：新闻18 / 新闻19 ===== -->
+      <div class="leaf">
+        <div class="face front">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">18</div>
+            <h2 class="news-t">扶持AI产业政策</h2>
+            <p class="news-b">《经济日报》刊文指出，扶持人工智能产业应从粗放式比拼转向精准赋能、协同共进和生态深耕，推动政策红利转化为实际产业动能，促进人工智能产业高质量发展。这一观点反映了政策导向的转变，即从规模扩张转向质量提升。</p>
+            <div class="watch"><b>观此：</b>从粗放式比拼到精准赋能、协同共进、生态深耕，这一政策导向的转变，标志着AI产业发展进入新阶段。过去，AI产业的发展更多依靠资本投入与规模扩张，而未来将更加注重技术创新与产业融合。精准赋能意味着政策将更加聚焦于解决实际痛点，协同共进强调产业链上下游的协同，生态深耕则关注AI技术的可持续发展。这一转变，有望推动AI产业从“快”向“好”发展。</div>
+            <p class="src">来源：经济日报（<a href="https://news.10jqka.com.cn/20260913/c679851133.shtml" target="_blank">news.10jqka.com.cn</a>）</p>
+            <div class="pageno">— 18 —</div>
+          </div>
+        </div>
+        <div class="face back">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">19</div>
+            <h2 class="news-t">深圳算力需求增长</h2>
+            <p class="news-b">中国电信研究院行业与企业战略研究所所长邬贺铨表示，2026年3月Token消费已达日均140万亿，2030年中国算力有望占全球30%。未来2至3年我国算力需求平均每年将增长近10倍，预计2029年推理算力市场占比达到80%。这一数据反映了中国算力需求的爆发式增长。</p>
+            <div class="watch"><b>观此：</b>未来2至3年算力需求增长近10倍，这一预测令人咋舌。推理算力占比提升至80%，说明AI应用将从训练向推理扩展，更多场景将依赖实时AI服务。中国算力有望占全球30%，这一目标不仅需要技术突破，更需要全球算力资源的合理配置。算力需求的激增，既是挑战也是机遇，如何将算力优势转化为产业优势，是中国AI产业必须回答的问题。</div>
+            <p class="src">来源：中国电信研究院（<a href="https://news.10jqka.com.cn/20260913/c679851133.shtml" target="_blank">news.10jqka.com.cn</a>）</p>
+            <div class="pageno">— 19 —</div>
+          </div>
+        </div>
+      </div>
+      <!-- ===== leaf 11：新闻20 / 封底 ===== -->
+      <div class="leaf">
+        <div class="face front">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">20</div>
+            <h2 class="news-t">中兴国产高性能集群</h2>
+            <p class="news-b">中兴国产高性能Matrix集群超节点将芯片适配周期压缩至3至6个月，大幅提升了算力基础设施的部署效率。这一技术突破，有助于降低算力基础设施的建设成本，加快AI模型的部署速度。</p>
+            <div class="watch"><b>观此：</b>芯片适配周期压缩至3至6个月，这一突破将显著提升算力基础设施的部署效率。过去，算力基础设施的建设往往受制于芯片适配周期长的问题，而Matrix集群的问世，有望解决这一痛点。对于AI产业而言，部署效率的提升，意味着更快的模型迭代与更低的试错成本。中兴的这一突破，不仅提升了自身竞争力，也为行业提供了新的解决方案。</div>
+            <p class="src">来源：中兴通讯（<a href="https://news.10jqka.com.cn/20260913/c679851133.shtml" target="_blank">news.10jqka.com.cn</a>）</p>
+            <div class="pageno">— 20 —</div>
+          </div>
+        </div>
+        <div class="face back back-cover">
+          <div class="pad">
+            <div class="end-big">本期完</div>
+            <div class="end-sub">
+              <span class="disc">纯新闻叙事</span><br>
+              我们坚持纯新闻叙事——只呈现事实<br>
+              与新闻价值，把研究分析留给您自己<br><br>
+              全球重要动态 · 2026-09-13<br>
+              翻动书页，用十分钟把握昨夜今晨的世界
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="nav">
+  <button id="prev" title="上一页（←）">‹</button>
+  <div class="pg" id="pg">1 / 13</div>
+  <button id="next" title="下一页（→）">›</button>
+</div>
+
+<script>
+  const book = document.getElementById('book');
+  const leaves = Array.from(book.querySelectorAll('.leaf'));
+  const N = leaves.length;            // 12 张书页
+  const TOTAL = N + 1;                // 13 个可视跨页（桌面）
+  let flipped = 0;
+  let mobileMode = false;
+  let mobileIndex = 0;
+
+  // 手机单页模式：12 张书页 × 2 面 = 24 个单页
+  const FACES = [];
+  leaves.forEach((lf, i) => {
+    FACES.push({leaf: i, face: 'front'});
+    FACES.push({leaf: i, face: 'back'});
+  });
+
+  function isMobile(){ return window.innerWidth <= 760; }
+
+  function updateDesktop(){
+    leaves.forEach((lf, i) => {
+      lf.style.zIndex = (i < flipped) ? (i + 1) : ((N + 100) - i);
+    });
+    document.getElementById('pg').textContent = (flipped + 1) + ' / ' + TOTAL;
+    document.getElementById('prev').disabled = (flipped <= 0);
+    document.getElementById('next').disabled = (flipped >= N);
+  }
+
+  function updateMobile(){
+    leaves.forEach(lf => lf.classList.remove('mobile-active','show-front','show-back'));
+    const f = FACES[mobileIndex];
+    const lf = leaves[f.leaf];
+    lf.classList.add('mobile-active', f.face === 'front' ? 'show-front' : 'show-back');
+    document.getElementById('pg').textContent = (mobileIndex + 1) + ' / ' + FACES.length;
+    document.getElementById('prev').disabled = (mobileIndex <= 0);
+    document.getElementById('next').disabled = (mobileIndex >= FACES.length - 1);
+  }
+
+  function refresh(){
+    mobileMode = isMobile();
+    const hint = document.getElementById('hint');
+    if(mobileMode){
+      leaves.forEach(lf => { lf.style.transform = ''; lf.style.zIndex = ''; });
+      updateMobile();
+      if(hint) hint.textContent = '📖 点击左右两侧或左右滑动翻页 · 共 ' + FACES.length + ' 页';
+    } else {
+      leaves.forEach(lf => lf.classList.remove('mobile-active','show-front','show-back'));
+      updateDesktop();
+      if(hint) hint.textContent = '📖 点击书页左右两侧 或 使用键盘 ← → 翻页 · 共 ' + TOTAL + ' 张';
+    }
+  }
+
+  function goNext(){
+    if(mobileMode){
+      if(mobileIndex >= FACES.length - 1) return;
+      mobileIndex++;
+      updateMobile();
+    } else {
+      if(flipped >= N) return;
+      const lf = leaves[flipped];
+      lf.style.zIndex = 9999;
+      lf.style.transform = 'rotateY(-180deg)';
+      flipped++;
+      setTimeout(updateDesktop, 920);
+    }
+  }
+
+  function goPrev(){
+    if(mobileMode){
+      if(mobileIndex <= 0) return;
+      mobileIndex--;
+      updateMobile();
+    } else {
+      if(flipped <= 0) return;
+      flipped--;
+      const lf = leaves[flipped];
+      lf.style.zIndex = 9999;
+      lf.style.transform = 'rotateY(0deg)';
+      setTimeout(updateDesktop, 920);
+    }
+  }
+
+  book.addEventListener('click', (e) => {
+    const r = book.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width;
+    if(mobileMode){
+      // 手机：点左侧 30% 上一页，右侧 30% 下一页，中间区域留给点击链接
+      if(x < 0.3) goPrev();
+      else if(x > 0.7) goNext();
+    } else {
+      if(x < 0.5) goPrev(); else goNext();
+    }
+  });
+
+  // 手机触摸滑动翻页
+  let touchStartX = null;
+  book.addEventListener('touchstart', (e) => {
+    touchStartX = e.touches[0].clientX;
+  }, {passive:true});
+  book.addEventListener('touchend', (e) => {
+    if(touchStartX === null) return;
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if(Math.abs(dx) > 50){
+      if(dx < 0) goNext(); else goPrev();
+    }
+    touchStartX = null;
+  }, {passive:true});
+
+  document.getElementById('next').addEventListener('click', (e) => { e.stopPropagation(); goNext(); });
+  document.getElementById('prev').addEventListener('click', (e) => { e.stopPropagation(); goPrev(); });
+  window.addEventListener('keydown', (e) => {
+    if(e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') goNext();
+    if(e.key === 'ArrowLeft' || e.key === 'ArrowUp') goPrev();
+  });
+
+  // 自适应缩放：桌面保持缩放，手机不缩放
+  function fit(){
+    const wrap = document.getElementById('scaleWrap');
+    if(mobileMode){ wrap.style.transform = ''; return; }
+    const avail = window.innerWidth - 24;
+    const s = Math.min(1, avail / (940 + 40));
+    wrap.style.transform = 'scale(' + s + ')';
+  }
+
+  // 支持 URL 直达某页：?page=5（第 5 页），手机和桌面均生效
+  function initFromUrl(){
+    const m = location.search.match(/[?&]page=(\d+)/);
+    if(!m) return;
+    const n = Math.max(1, parseInt(m[1], 10)) - 1;
+    if(mobileMode){
+      mobileIndex = Math.max(0, Math.min(n, FACES.length - 1));
+      updateMobile();
+    } else {
+      flipped = Math.max(0, Math.min(n, N));
+      updateDesktop();
+    }
+  }
+
+  window.addEventListener('resize', () => { refresh(); fit(); });
+
+  refresh();
+  fit();
+  initFromUrl();
+</script>
+</body>
+</html>
