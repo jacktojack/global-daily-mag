@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>全球重要动态 · 2026-09-19 早间版（翻页杂志）</title>
+<style>
+  :root{
+    --paper:#f6f1e6;
+    --ink:#211d18;
+    --muted:#7a6f60;
+    --red:#9e1b1b;
+    --rule:#2a2620;
+    --box:#ebe0c8;
+    --boxline:#d8c9a9;
+    --dark1:#1b2330;
+    --dark2:#0e131d;
+    --gold:#c8a24a;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:radial-gradient(1200px 700px at 50% -10%, #34302a 0%, #211e19 55%, #16140f 100%);
+    font-family:"Noto Serif SC","Source Han Serif SC","Songti SC","SimSun",Georgia,serif;
+    color:var(--ink);
+    line-height:1.75;
+    -webkit-font-smoothing:antialiased;
+  }
+  .stage{
+    min-height:100vh;
+    display:flex;flex-direction:column;align-items:center;
+    padding:26px 12px 96px;
+  }
+  .hint{
+    color:#cfc4ad;font-size:13px;letter-spacing:.08em;margin:0 0 18px;opacity:.8;
+  }
+  .scaleWrap{transform-origin:top center;}
+  .book{
+    position:relative;width:940px;height:700px;
+    perspective:2600px;transform-style:preserve-3d;
+    filter:drop-shadow(0 24px 50px rgba(0,0,0,.55));
+  }
+  .leaf{
+    position:absolute;top:0;left:470px;width:470px;height:700px;
+    transform-origin:left center;transform-style:preserve-3d;
+    transform:rotateY(0deg);
+    transition:transform .9s cubic-bezier(.55,.08,.2,1);
+  }
+  .face{
+    position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;
+    border:1px solid #cabd9f;overflow:hidden;
+    display:flex;flex-direction:column;
+  }
+  .front{transform:rotateY(0deg);background:var(--paper);}
+  .back{transform:rotateY(180deg);background:var(--paper);}
+  .pad{padding:30px 28px;flex:1;display:flex;flex-direction:column;}
+
+  .folio{font-size:11px;letter-spacing:.22em;color:var(--muted);text-transform:uppercase;
+    border-bottom:1px solid var(--boxline);padding-bottom:7px;margin-bottom:14px;}
+
+  /* 新闻页 */
+  .news-no{font-size:44px;font-weight:700;color:var(--red);line-height:.85;font-variant-numeric:tabular-nums;}
+  .news-t{font-size:21px;font-weight:700;line-height:1.35;margin:10px 0 14px;}
+  .news-b{font-size:14.5px;line-height:1.85;text-align:justify;margin:0 0 14px;flex:1;}
+  .watch{background:var(--box);border-left:4px solid var(--red);padding:9px 12px;font-size:13px;line-height:1.7;margin:0 0 10px;}
+  .watch b{color:var(--red);margin-right:3px;}
+  .src{font-size:12px;color:var(--muted);line-height:1.6;}
+  .src a{color:#3a5e8c;text-decoration:none;border-bottom:1px dotted #3a5e8c;word-break:break-all;}
+  .src a:hover{color:var(--red);}
+  .pageno{text-align:center;font-size:11px;color:var(--muted);letter-spacing:.35em;margin-top:10px;}
+
+  /* 卷首 / 目录 / 封底 */
+  .sec-h{font-size:25px;font-weight:700;margin:4px 0 16px;border-bottom:2px solid var(--rule);padding-bottom:9px;}
+  .lead-p{font-size:15px;line-height:1.95;text-align:justify;margin:0 0 14px;}
+  .lead-note{font-size:13.5px;line-height:1.9;color:#3a342b;background:var(--box);padding:12px 14px;border-left:4px solid var(--red);}
+  .toc{columns:2;column-gap:22px;font-size:11.5px;line-height:1.35;padding-left:18px;margin:0;}
+  .toc li{margin-bottom:5px;break-inside:avoid;}
+  .toc li::marker{color:var(--red);font-weight:700;font-variant-numeric:tabular-nums;}
+  .toc li span{display:none;}
+  .contents-pad{padding:18px 22px 32px;}
+  .contents-pad .folio{margin-bottom:6px;}
+  .contents-pad .sec-h{margin:0 0 6px;padding-bottom:6px;}
+  .contents-pad .pageno{margin-top:2px;}
+  .disc{color:var(--red);font-weight:700;}
+  .end-box{border:1px solid var(--boxline);padding:14px;font-size:13px;line-height:1.85;background:var(--box);}
+
+  /* 封面 */
+  .cover{
+    background:
+      radial-gradient(700px 500px at 50% 18%, rgba(60,80,120,.35), transparent 60%),
+      linear-gradient(160deg,#202a3b 0%, #131a26 55%, #0c111a 100%);
+    color:#f1e9d6;border-color:#3a455c;
+  }
+  .cover-in{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:34px;}
+  .cover-top{font-size:12px;letter-spacing:.5em;color:var(--gold);text-transform:uppercase;margin-bottom:26px;}
+  .cover-title{font-size:62px;font-weight:700;letter-spacing:.14em;line-height:1.15;margin:0;
+    text-shadow:0 2px 18px rgba(200,162,74,.35);}
+  .cover-rule{width:120px;height:2px;background:var(--gold);margin:26px 0 20px;opacity:.8;}
+  .cover-sub{font-size:15px;letter-spacing:.32em;color:#d9cfb6;}
+  .cover-foot{position:absolute;bottom:30px;left:0;right:0;text-align:center;
+    font-size:12px;letter-spacing:.18em;color:#b8ad94;}
+
+  /* 封底 */
+  .back-cover{
+    background:linear-gradient(160deg,#202a3b 0%, #131a26 100%);
+    color:#f1e9d6;border-color:#3a455c;
+  }
+  .back-cover .pad{align-items:center;justify-content:center;text-align:center;}
+  .back-cover .end-big{font-size:40px;font-weight:700;letter-spacing:.2em;color:#f1e9d6;margin:0 0 18px;}
+  .back-cover .end-sub{font-size:13px;letter-spacing:.18em;color:#b8ad94;line-height:2;}
+
+  /* 导航（透明浮层，不遮挡正文） */
+  .nav{position:fixed;bottom:0;left:0;right:0;height:62px;background:rgba(18,16,13,.48);
+    display:flex;align-items:center;justify-content:center;gap:22px;z-index:60;
+    border-top:1px solid rgba(200,162,74,.18);backdrop-filter:blur(8px);pointer-events:none;}
+  .nav button{pointer-events:auto;background:transparent;border:1px solid rgba(200,162,74,.55);color:#e8e0cf;
+    font-size:22px;width:46px;height:38px;border-radius:8px;cursor:pointer;
+    font-family:inherit;transition:.2s;display:flex;align-items:center;justify-content:center;}
+  .nav button:hover{background:rgba(200,162,74,.25);border-color:var(--gold);}
+  .nav button:disabled{opacity:.35;cursor:default;}
+  .nav .pg{color:#f5efe3;font-size:14px;letter-spacing:.12em;min-width:96px;text-align:center;
+    text-shadow:0 1px 4px rgba(0,0,0,.55);}
+
+  @media (max-width:760px){
+    .hint{
+      position:fixed;top:0;left:0;right:0;z-index:70;
+      font-size:12px;margin:0;padding:10px 14px;
+      background:rgba(18,16,13,.60);color:#cfc4ad;
+      text-align:center;letter-spacing:.04em;
+      backdrop-filter:blur(6px);border-bottom:1px solid rgba(200,162,74,.2);
+    }
+    .stage{
+      position:fixed;inset:0;padding:0;display:block;overflow:hidden;
+      background:radial-gradient(1200px 700px at 50% -10%, #34302a 0%, #211e19 55%, #16140f 100%);
+    }
+    .scaleWrap{transform:none !important;width:100vw;height:100vh;}
+    .book{
+      position:absolute;inset:0;width:100vw;height:100vh;
+      perspective:none;transform-style:flat;filter:none;
+    }
+    .leaf{
+      position:absolute;inset:0;width:100vw;height:100vh;left:0 !important;
+      opacity:0;pointer-events:none;z-index:0;
+      transform:none !important;transition:opacity .35s ease;
+    }
+    .leaf.mobile-active{opacity:1;pointer-events:auto;z-index:10;}
+    .leaf .face{display:none !important;position:absolute;inset:0;width:100%;height:100%;
+      transform:none !important;backface-visibility:visible;border:none;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+    .leaf.show-front .front{display:flex !important;}
+    .leaf.show-back .back{display:flex !important;}
+    .pad{padding:64px 22px 150px;}
+
+    .cover-in{padding:70px 26px 26px;}
+    .cover-top{font-size:13px;margin-bottom:22px;}
+    .cover-title{font-size:52px;}
+    .cover-sub{font-size:16px;letter-spacing:.22em;}
+    .cover-foot{bottom:110px;font-size:13px;}
+
+    .sec-h{font-size:28px;}
+    .lead-p{font-size:17px;line-height:2;}
+    .lead-note{font-size:15px;}
+    .toc{columns:2;column-gap:14px;padding-left:16px;font-size:11.5px;line-height:1.25;}
+    .toc li{margin-bottom:4px;break-inside:avoid;}
+    .toc li::marker{font-size:11.5px;}
+    .contents-pad{padding:64px 16px 170px;}
+    .contents-pad .folio{margin-bottom:4px;}
+    .contents-pad .sec-h{font-size:22px;margin:0 0 8px;padding-bottom:6px;}
+    .contents-pad .pageno{margin-top:auto;padding-top:10px;}
+
+    .news-no{font-size:58px;}
+    .news-t{font-size:25px;line-height:1.4;margin:12px 0 16px;}
+    .news-b{font-size:16px;line-height:2;}
+    .watch{font-size:14.5px;line-height:1.85;padding:12px 14px;}
+    .src{font-size:13px;line-height:1.75;}
+
+    .back-cover .end-big{font-size:48px;}
+    .back-cover .end-sub{font-size:15px;line-height:2.2;}
+
+    .nav{height:58px;gap:18px;}
+    .nav button{width:50px;height:40px;font-size:24px;}
+    .nav .pg{font-size:14px;min-width:76px;}
+  }
+</style>
+</head>
+<body>
+<div class="stage">
+  <p class="hint" id="hint">📖 点击书页左右两侧 或 使用键盘 ← → 翻页</p>
+  <div class="scaleWrap" id="scaleWrap">
+    <div class="book" id="book">
+
+      <!-- ===== leaf 0：封面 / 卷首语 ===== -->
+      <div class="leaf">
+        <div class="face front cover">
+          <div class="cover-in">
+            <div class="cover-top">Global Daily Brief</div>
+            <h1 class="cover-title">全球<br>重要动态</h1>
+            <div class="cover-rule"></div>
+            <div class="cover-sub">一日廿事 · 纯新闻叙述</div>
+            <div class="cover-foot">2026 年 9 月 19 日　星期六 · 早间版</div>
+          </div>
+        </div>
+        <div class="face back">
+          <div class="pad">
+            <div class="folio">卷首语 · Foreword</div>
+            <h2 class="sec-h">致读者</h2>
+            <p class="lead-p">一觉醒来，世界又发生了哪些大事？本期为您精选 <b>20 条</b> 值得关注的全球动态，覆盖灾害救援、地缘博弈、AI 算力、航天探索、产业政策和民生医疗。</p>
+            <p class="lead-p">我们坚持<b>纯新闻叙事</b>——只呈现事实与新闻价值，把研究分析留给您自己。翻动书页，用十分钟把握昨夜今晨的世界。</p>
+            <div class="lead-note">本期聚焦：月球开源·纳米芯片·太空造骨</div>
+            <div class="pageno">— 卷首 —</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== leaf 1：目录 / 新闻01 ===== -->
+      <div class="leaf">
+        <div class="face front">
+          <div class="pad contents-pad">
+            <div class="folio">目录 · Contents</div>
+            <h2 class="sec-h">本期目录</h2>
+            <ol class="toc">
+              <li>首个月球模型开源：把几十年观测炼成可复用工具</li>
+              <li>海洋Token工厂落地青岛：为蓝色产业配专属智能要素</li>
+              <li>Anthropic转投小型数据中心，还悄悄建了座湿实验室</li>
+              <li>三星提前为特斯拉试产AI5芯片</li>
+              <li>台积电重返龙潭，锁定1.4纳米以下制程</li>
+              <li>华为昇腾950智算集群云服务定档商用</li>
+              <li>智谱推出GLM-5.3-FlashX，推理提速五倍</li>
+              <li>Figure亮出Helix 2.5：机器人零样本做家务</li>
+              <li>SpaceX拟600亿美元收购Cursor，抢AI编程入口</li>
+              <li>九识落地国内首个L4万卡算力集群</li>
+              <li>玻利维亚丛林现猫科新物种，百年首次</li>
+              <li>太空造骨：在轨合成人造骨研究骨质疏松</li>
+              <li>中华骨髓库非血缘捐献突破24000例</li>
+              <li>医药工业&quot;十五五&quot;规划：创新药增速瞄准年均两成</li>
+              <li>农业机械化&quot;十五五&quot;：AI与新能源开进田间</li>
+              <li>文化产业&quot;十五五&quot;规划：科技与文化的深度融合</li>
+              <li>房车消费迎国家层面系统扶持</li>
+              <li>上召窑秦陵考古：确认战国晚期秦王级墓葬</li>
+              <li>文博日历里的虎形枕：宋金吉祥纹饰的温度</li>
+              <li>诺贝尔奖奖金上调至1200万瑞典克朗</li>
+            </ol>
+            <div class="pageno">— 目录 —</div>
+          </div>
+        </div>
+        <div class="face back">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">01</div>
+            <h2 class="news-t">首个月球模型开源：把几十年观测炼成可复用工具</h2>
+            <p class="news-b">NASA与IBM研究院联合发布并开源了首个月球智能模型，模型权重与代码向全球研究者开放。这套工具把数十年来分散的月球观测数据，转化为可用于陨石坑测绘、火山地貌识别和极区水冰潜力评估的分析能力。
+观此：月球探测过去最大的痛点，不是没数据，而是数据散落在不同任务、不同格式里，难以被重复使用。开源模型相当于给月球科学装上了&quot;公共操作系统&quot;，任何团队都能下载、微调、做自己的研究。它不直接送人登月，却把登月之后&quot;怎么读懂月球&quot;的门槛大幅降低了。
+来源：媒体综合（https://so.html5.qq.com/page/real/search_news?docid=70000021_0236aadcea522752）</p>
+            <div class="watch"><b>观此：</b>月球探测过去最大的痛点，不是没数据，而是数据散落在不同任务、不同格式里，难以被重复使用。开源模型相当于给月球科学装上了&quot;公共操作系统&quot;，任何团队都能下载、微调、做自己的研究。它不直接送人登月，却把登月之后&quot;怎么读懂月球&quot;的门槛大幅降低了。</div>
+            <p class="src">来源：媒体综合（<a href="https://so.html5.qq.com/page/real/search_news?docid=70000021_0236aadcea522752" target="_blank">so.html5.qq.com</a>）</p>
+            <div class="pageno">— 01 —</div>
+          </div>
+        </div>
+      </div>
+      <!-- ===== leaf 2：新闻02 / 新闻03 ===== -->
+      <div class="leaf">
+        <div class="face front">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">02</div>
+            <h2 class="news-t">海洋Token工厂落地青岛：为蓝色产业配专属智能要素</h2>
+            <p class="news-b">中国首个面向海洋产业的专属智能要素供给平台&quot;海洋Token（词元）工厂&quot;正式发布并落地青岛，整体架构包含数据、算力、算法三部分，规划深度贯穿深海油气勘探等实战场景。
+观此：把&quot;词元工厂&quot;这个概念从通用大模型搬到海洋产业，意味着行业智能开始从通用走向专用。深海勘探长期受限于数据孤岛与算力分散，一个垂直平台若能把这些要素打通，价值不在炫技，而在让油气、渔业、环境监测等领域真正用得起AI。这是产业智能化下沉到具体行业的一个信号。
+来源：媒体综合（https://so.html5.qq.com/page/real/search_news?docid=70000021_0236aadcea522752）</p>
+            <div class="watch"><b>观此：</b>把&quot;词元工厂&quot;这个概念从通用大模型搬到海洋产业，意味着行业智能开始从通用走向专用。深海勘探长期受限于数据孤岛与算力分散，一个垂直平台若能把这些要素打通，价值不在炫技，而在让油气、渔业、环境监测等领域真正用得起AI。这是产业智能化下沉到具体行业的一个信号。</div>
+            <p class="src">来源：媒体综合（<a href="https://so.html5.qq.com/page/real/search_news?docid=70000021_0236aadcea522752" target="_blank">so.html5.qq.com</a>）</p>
+            <div class="pageno">— 02 —</div>
+          </div>
+        </div>
+        <div class="face back">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">03</div>
+            <h2 class="news-t">Anthropic转投小型数据中心，还悄悄建了座湿实验室</h2>
+            <p class="news-b">Anthropic与OpenAI正把部分算力需求转向20至30兆瓦级别的数据中心以更快获得容量；另有消息称Anthropic在旧金山湾区低调建立湿实验室，把AI业务延伸到需要动手操作的生物学与药物科学研究。
+观此：大模型公司的瓶颈正在从&quot;算法谁更强&quot;转向&quot;电从哪来、实验台在哪&quot;。小型数据中心是绕开大园区排队的电容量捷径；而自建湿实验室，则显示头部AI公司不愿只停在软件层——它们想亲自验证AI设计出的分子是否真能在试管里成立。智能的下一站，是真实的物理世界。
+来源：媒体综合（https://so.html5.qq.com/page/real/search_news?docid=70000021_0236aadcea522752）</p>
+            <div class="watch"><b>观此：</b>大模型公司的瓶颈正在从&quot;算法谁更强&quot;转向&quot;电从哪来、实验台在哪&quot;。小型数据中心是绕开大园区排队的电容量捷径；而自建湿实验室，则显示头部AI公司不愿只停在软件层——它们想亲自验证AI设计出的分子是否真能在试管里成立。智能的下一站，是真实的物理世界。</div>
+            <p class="src">来源：媒体综合（<a href="https://so.html5.qq.com/page/real/search_news?docid=70000021_0236aadcea522752" target="_blank">so.html5.qq.com</a>）</p>
+            <div class="pageno">— 03 —</div>
+          </div>
+        </div>
+      </div>
+      <!-- ===== leaf 3：新闻04 / 新闻05 ===== -->
+      <div class="leaf">
+        <div class="face front">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">04</div>
+            <h2 class="news-t">三星提前为特斯拉试产AI5芯片</h2>
+            <p class="news-b">三星电子已在美国得州泰勒代工厂开始原型生产，向特斯拉提供AI5芯片。因大型科技公司对AI芯片需求激增，三星提前了原型产量以启动良率验证，计划年底完成大规模生产验证，明年全面供应。
+观此：AI芯片的稀缺，已经让车企直接卷入先进制程争夺。特斯拉把自动驾驶的算力命脉交给三星试产，说明端侧智能的较量本质是晶圆厂产能的较量。提前试产是为了抢良率窗口——在半导体里，早三个月验证，可能就意味着早半年量产。
+来源：媒体综合（https://so.html5.qq.com/page/real/search_news?docid=70000021_0236aadcea522752）</p>
+            <div class="watch"><b>观此：</b>AI芯片的稀缺，已经让车企直接卷入先进制程争夺。特斯拉把自动驾驶的算力命脉交给三星试产，说明端侧智能的较量本质是晶圆厂产能的较量。提前试产是为了抢良率窗口——在半导体里，早三个月验证，可能就意味着早半年量产。</div>
+            <p class="src">来源：媒体综合（<a href="https://so.html5.qq.com/page/real/search_news?docid=70000021_0236aadcea522752" target="_blank">so.html5.qq.com</a>）</p>
+            <div class="pageno">— 04 —</div>
+          </div>
+        </div>
+        <div class="face back">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">05</div>
+            <h2 class="news-t">台积电重返龙潭，锁定1.4纳米以下制程</h2>
+            <p class="news-b">供应链透露台积电决定重返龙潭设厂，龙科三期优先锁定1.4纳米（A14）以下先进制程，初步规划三座晶圆厂，首座目标2030年前后完工并进入量产准备，整体投资估计超1兆元新台币。
+观此：当外界还在消化3纳米、2纳米的量产节奏，龙头已把目光投到1.4纳米以下。这张时间表传递的信号是：先进制程的物理极限虽然逼近，但产业迭代的节奏并未放缓。重返龙潭，也是把人才、供应链与地缘因素一起重新算进产能布局里。
+来源：媒体综合（https://so.html5.qq.com/page/real/search_news?docid=70000021_0236aadcea522752）</p>
+            <div class="watch"><b>观此：</b>当外界还在消化3纳米、2纳米的量产节奏，龙头已把目光投到1.4纳米以下。这张时间表传递的信号是：先进制程的物理极限虽然逼近，但产业迭代的节奏并未放缓。重返龙潭，也是把人才、供应链与地缘因素一起重新算进产能布局里。</div>
+            <p class="src">来源：媒体综合（<a href="https://so.html5.qq.com/page/real/search_news?docid=70000021_0236aadcea522752" target="_blank">so.html5.qq.com</a>）</p>
+            <div class="pageno">— 05 —</div>
+          </div>
+        </div>
+      </div>
+      <!-- ===== leaf 4：新闻06 / 新闻07 ===== -->
+      <div class="leaf">
+        <div class="face front">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">06</div>
+            <h2 class="news-t">华为昇腾950智算集群云服务定档商用</h2>
+            <p class="news-b">华为云CEO周跃峰表示，灵衢昇腾950智算集群云服务将于9月30日面向国内市场商用，11月30日面向全球市场商用。该集群服务定位为大规模训推一体的算力底座。
+观此：国产智算集群走向公开商用，意味着大模型训练的算力供给多了一个本土选项。对国内AI应用开发者而言，关键不只是峰值算力，而是集群稳定性与生态适配能否撑住长周期训练。9月与11月两个时间节点，是国内与全球市场分别交卷的时刻。
+来源：媒体综合（https://so.html5.qq.com/page/real/search_news?docid=70000021_0236aadcea522752）</p>
+            <div class="watch"><b>观此：</b>国产智算集群走向公开商用，意味着大模型训练的算力供给多了一个本土选项。对国内AI应用开发者而言，关键不只是峰值算力，而是集群稳定性与生态适配能否撑住长周期训练。9月与11月两个时间节点，是国内与全球市场分别交卷的时刻。</div>
+            <p class="src">来源：媒体综合（<a href="https://so.html5.qq.com/page/real/search_news?docid=70000021_0236aadcea522752" target="_blank">so.html5.qq.com</a>）</p>
+            <div class="pageno">— 06 —</div>
+          </div>
+        </div>
+        <div class="face back">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">07</div>
+            <h2 class="news-t">智谱推出GLM-5.3-FlashX，推理提速五倍</h2>
+            <p class="news-b">智谱正式发布GLM-5.3-FlashX，API同步全面开放。新版本推理速度最高可达200 tokens/s，较现有GLM-5.3-Flash提升5倍，定价提升至原版本的2.5倍。
+观此：大模型竞争正在分出两条赛道——一条拼能力上限，一条拼性价比与速度。FlashX把推理速度拉高五倍，指向的是海量调用场景：客服、摘要、实时交互。当速度成为卖点，说明行业重心正从&quot;能不能做&quot;转向&quot;能不能便宜地大规模做&quot;。
+来源：网易（https://www.163.com/dy/article/L762BFJK051288FS.html）</p>
+            <div class="watch"><b>观此：</b>大模型竞争正在分出两条赛道——一条拼能力上限，一条拼性价比与速度。FlashX把推理速度拉高五倍，指向的是海量调用场景：客服、摘要、实时交互。当速度成为卖点，说明行业重心正从&quot;能不能做&quot;转向&quot;能不能便宜地大规模做&quot;。</div>
+            <p class="src">来源：网易（<a href="https://www.163.com/dy/article/L762BFJK051288FS.html" target="_blank">163.com</a>）</p>
+            <div class="pageno">— 07 —</div>
+          </div>
+        </div>
+      </div>
+      <!-- ===== leaf 5：新闻08 / 新闻09 ===== -->
+      <div class="leaf">
+        <div class="face front">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">08</div>
+            <h2 class="news-t">Figure亮出Helix 2.5：机器人零样本做家务</h2>
+            <p class="news-b">人形机器人公司Figure推出其称&quot;最先进&quot;的神经网络模型Helix 2.5，机器人无需额外训练即可实现零样本全身自主做家务，能把对物理世界的理解从一个环节迁移到另一个环境，实时适应动态变化。
+观此：具身智能的难点一直在于&quot;换个环境就傻&quot;。Helix 2.5宣称的零样本迁移，若属实，意味着机器人开始具备某种通用的身体常识——不是为某件事编程，而是理解&quot;物体、空间、动作&quot;之间的关系。离走进家庭还很远，但方向比单次演示更重要。
+来源：网易（https://www.163.com/dy/article/L762BFJK051288FS.html）</p>
+            <div class="watch"><b>观此：</b>具身智能的难点一直在于&quot;换个环境就傻&quot;。Helix 2.5宣称的零样本迁移，若属实，意味着机器人开始具备某种通用的身体常识——不是为某件事编程，而是理解&quot;物体、空间、动作&quot;之间的关系。离走进家庭还很远，但方向比单次演示更重要。</div>
+            <p class="src">来源：网易（<a href="https://www.163.com/dy/article/L762BFJK051288FS.html" target="_blank">163.com</a>）</p>
+            <div class="pageno">— 08 —</div>
+          </div>
+        </div>
+        <div class="face back">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">09</div>
+            <h2 class="news-t">SpaceX拟600亿美元收购Cursor，抢AI编程入口</h2>
+            <p class="news-b">马斯克旗下SpaceX据报道拟斥资600亿美元收购AI编程工具Cursor，以掌控AI编程赛道，科技企业对AI应用层的争夺进一步加剧。
+观此：当火箭公司去收购编程工具，看的不是代码编辑器本身，而是&quot;谁定义下一代软件的书写方式&quot;。AI编程是自然语言变成产品的关键入口，抢占它，等于抢占未来工程师的工作流。这笔传闻背后，是巨头对应用层话语权的焦虑。
+来源：网易（https://www.163.com/dy/article/L762BFJK051288FS.html）</p>
+            <div class="watch"><b>观此：</b>当火箭公司去收购编程工具，看的不是代码编辑器本身，而是&quot;谁定义下一代软件的书写方式&quot;。AI编程是自然语言变成产品的关键入口，抢占它，等于抢占未来工程师的工作流。这笔传闻背后，是巨头对应用层话语权的焦虑。</div>
+            <p class="src">来源：网易（<a href="https://www.163.com/dy/article/L762BFJK051288FS.html" target="_blank">163.com</a>）</p>
+            <div class="pageno">— 09 —</div>
+          </div>
+        </div>
+      </div>
+      <!-- ===== leaf 6：新闻10 / 新闻11 ===== -->
+      <div class="leaf">
+        <div class="face front">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">10</div>
+            <h2 class="news-t">九识落地国内首个L4万卡算力集群</h2>
+            <p class="news-b">九识落地国内首个L4万卡算力集群，自动驾驶大规模仿真时代到来，海量场景仿真能力将成为智能驾驶研发迭代的关键基础设施。
+观此：自动驾驶的进步越来越依赖&quot;在虚拟里跑够里程&quot;。万卡集群的意义，是把真实路测难以覆盖的长尾场景，用仿真批量生产出来。当仿真成为研发底座，车辆迭代速度将不再只受实车排期限制，而受算力规模限制。
+来源：网易（https://www.163.com/dy/article/L762BFJK051288FS.html）</p>
+            <div class="watch"><b>观此：</b>自动驾驶的进步越来越依赖&quot;在虚拟里跑够里程&quot;。万卡集群的意义，是把真实路测难以覆盖的长尾场景，用仿真批量生产出来。当仿真成为研发底座，车辆迭代速度将不再只受实车排期限制，而受算力规模限制。</div>
+            <p class="src">来源：网易（<a href="https://www.163.com/dy/article/L762BFJK051288FS.html" target="_blank">163.com</a>）</p>
+            <div class="pageno">— 10 —</div>
+          </div>
+        </div>
+        <div class="face back">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">11</div>
+            <h2 class="news-t">玻利维亚丛林现猫科新物种，百年首次</h2>
+            <p class="news-b">栖息于玻利维亚丛林的一种野猫被证实为先前未知的新物种，属于虎猫属。这是100多年来人类首次发现现存的猫科动物新物种。
+观此：在物种灭绝新闻频发的今天，发现一个全新的猫科成员格外珍贵。它提醒我们，地球生物清单远未写完，尤其热带丛林这类采样不足的区域。新物种的发现往往也意味着一片尚未被保护的栖息地进入视野——分类学本身就是保护的前哨。
+来源：新浪（https://cj.sina.cn/article/norm_detail?url=https%3A%2F%2Ffinance.sina.com.cn%2Fjjxw%2F2026-09-19%2Fdoc-inisifyk9958816.shtml）</p>
+            <div class="watch"><b>观此：</b>在物种灭绝新闻频发的今天，发现一个全新的猫科成员格外珍贵。它提醒我们，地球生物清单远未写完，尤其热带丛林这类采样不足的区域。新物种的发现往往也意味着一片尚未被保护的栖息地进入视野——分类学本身就是保护的前哨。</div>
+            <p class="src">来源：新浪（<a href="https://cj.sina.cn/article/norm_detail?url=https%3A%2F%2Ffinance.sina.com.cn%2Fjjxw%2F2026-09-19%2Fdoc-inisifyk9958816.shtml" target="_blank">cj.sina.cn</a>）</p>
+            <div class="pageno">— 11 —</div>
+          </div>
+        </div>
+      </div>
+      <!-- ===== leaf 7：新闻12 / 新闻13 ===== -->
+      <div class="leaf">
+        <div class="face front">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">12</div>
+            <h2 class="news-t">太空造骨：在轨合成人造骨研究骨质疏松</h2>
+            <p class="news-b">Helogen与伦敦大学学院合作，将在轨道上制造&quot;BIO-BONE&quot;人造骨模型，研究微重力对骨重塑的影响，为未来骨质疏松治疗积累数据。一项30天任务预计能生成地球上约需三年才能收集的数据。
+观此：骨骼在地球上时刻承受重力加载，微重力则把这个&quot;开关&quot;关掉，恰好放大了衰老与疾病中的骨流失过程。把实验搬上轨道，等于给研究者造了一台天然加速器。太空制造听起来科幻，落脚点却是地面上无数人的骨骼健康。
+来源：BioProcess International（https://uat.bioprocessintl.com/emerging-therapeutics-manufacturing/path-to-the-stars-helogen-partners-with-ucl-for-space-biomanufacturing）</p>
+            <div class="watch"><b>观此：</b>骨骼在地球上时刻承受重力加载，微重力则把这个&quot;开关&quot;关掉，恰好放大了衰老与疾病中的骨流失过程。把实验搬上轨道，等于给研究者造了一台天然加速器。太空制造听起来科幻，落脚点却是地面上无数人的骨骼健康。</div>
+            <p class="src">来源：BioProcess International（<a href="https://uat.bioprocessintl.com/emerging-therapeutics-manufacturing/path-to-the-stars-helogen-partners-with-ucl-for-space-biomanufacturing" target="_blank">uat.bioprocessintl.com</a>）</p>
+            <div class="pageno">— 12 —</div>
+          </div>
+        </div>
+        <div class="face back">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">13</div>
+            <h2 class="news-t">中华骨髓库非血缘捐献突破24000例</h2>
+            <p class="news-b">中华骨髓库非血缘造血干细胞捐献突破24000例，在库志愿捐献者数据接近379万人份。首例捐献到第10000例历时20余年，而第23000例到第24000例仅用112天。
+观此：后一半的一万例用的时间远少于前一半，曲线本身说明公众参与生命接力的意愿在加速。造血干细胞的配型极其看概率，库容越大，陌生人间配型成功的机会就越高。这串数字背后，是越来越多素不相识的人愿意为另一个生命按下&quot;同意&quot;。
+来源：新浪（https://cj.sina.cn/article/norm_detail?url=https%3A%2F%2Ffinance.sina.com.cn%2Fjjxw%2F2026-09-19%2Fdoc-inisifyk9958816.shtml）</p>
+            <div class="watch"><b>观此：</b>后一半的一万例用的时间远少于前一半，曲线本身说明公众参与生命接力的意愿在加速。造血干细胞的配型极其看概率，库容越大，陌生人间配型成功的机会就越高。这串数字背后，是越来越多素不相识的人愿意为另一个生命按下&quot;同意&quot;。</div>
+            <p class="src">来源：新浪（<a href="https://cj.sina.cn/article/norm_detail?url=https%3A%2F%2Ffinance.sina.com.cn%2Fjjxw%2F2026-09-19%2Fdoc-inisifyk9958816.shtml" target="_blank">cj.sina.cn</a>）</p>
+            <div class="pageno">— 13 —</div>
+          </div>
+        </div>
+      </div>
+      <!-- ===== leaf 8：新闻14 / 新闻15 ===== -->
+      <div class="leaf">
+        <div class="face front">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">14</div>
+            <h2 class="news-t">医药工业&quot;十五五&quot;规划：创新药增速瞄准年均两成</h2>
+            <p class="news-b">工信部等十部门联合印发《医药工业发展&quot;十五五&quot;规划》，提出到2030年规模以上医药工业企业营收超3.5万亿元，首创新药占全球比例达25%以上，创新药产业规模年均增速20%以上。
+观此：把&quot;首创新药占比&quot;写进国家规划指标，说明医药产业的评价标尺正从&quot;仿制规模&quot;转向&quot;源头创新&quot;。20%的年均增速目标不低，真正考验在后端——从实验室分子到可及药品之间，还有临床、审批与支付的整条链路要协同。规划定方向，落地看生态。
+来源：媒体综合（https://so.html5.qq.com/page/real/search_news?docid=70000021_0236aadcea522752）</p>
+            <div class="watch"><b>观此：</b>把&quot;首创新药占比&quot;写进国家规划指标，说明医药产业的评价标尺正从&quot;仿制规模&quot;转向&quot;源头创新&quot;。20%的年均增速目标不低，真正考验在后端——从实验室分子到可及药品之间，还有临床、审批与支付的整条链路要协同。规划定方向，落地看生态。</div>
+            <p class="src">来源：媒体综合（<a href="https://so.html5.qq.com/page/real/search_news?docid=70000021_0236aadcea522752" target="_blank">so.html5.qq.com</a>）</p>
+            <div class="pageno">— 14 —</div>
+          </div>
+        </div>
+        <div class="face back">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">15</div>
+            <h2 class="news-t">农业机械化&quot;十五五&quot;：AI与新能源开进田间</h2>
+            <p class="news-b">农业农村部、工信部印发《全国农业机械化发展&quot;十五五&quot;规划》，到2030年农作物耕种收综合机械化率超80%，人工智能、新能源等新技术新装备在农业机械化领域广泛应用。
+观此：农业机械化的下一程，关键词是&quot;智能&quot;与&quot;绿色&quot;。当AI调度和新能源动力进入农机，提升的不只是效率，还有对劳动力短缺与碳排放的双重缓解。80%的机械化率目标，意味着农业生产方式将整体从经验驱动转向数据驱动。
+来源：媒体综合（https://so.html5.qq.com/page/real/search_news?docid=70000021_0236aadcea522752）</p>
+            <div class="watch"><b>观此：</b>农业机械化的下一程，关键词是&quot;智能&quot;与&quot;绿色&quot;。当AI调度和新能源动力进入农机，提升的不只是效率，还有对劳动力短缺与碳排放的双重缓解。80%的机械化率目标，意味着农业生产方式将整体从经验驱动转向数据驱动。</div>
+            <p class="src">来源：媒体综合（<a href="https://so.html5.qq.com/page/real/search_news?docid=70000021_0236aadcea522752" target="_blank">so.html5.qq.com</a>）</p>
+            <div class="pageno">— 15 —</div>
+          </div>
+        </div>
+      </div>
+      <!-- ===== leaf 9：新闻16 / 新闻17 ===== -->
+      <div class="leaf">
+        <div class="face front">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">16</div>
+            <h2 class="news-t">文化产业&quot;十五五&quot;规划：科技与文化的深度融合</h2>
+            <p class="news-b">文旅部发布《文化产业发展&quot;十五五&quot;规划》，要求提升产业供给效能，强化科技创新赋能，探索文化和科技深度融合的有效路径，促进消费提质升级，挖掘文化消费潜力。
+观此：文化产业的增量，越来越来自&quot;科技+内容&quot;的化学反应——沉浸式展演、数字文博、AI辅助创作都在改写文化产品的形态。规划把科技赋能单列，说明文化不再只是内容本身，而是与新技术耦合的新供给。文化消费的盘子，取决于能不能把传统讲出新体验。
+来源：媒体综合（https://so.html5.qq.com/page/real/search_news?docid=70000021_0236aadcea522752）</p>
+            <div class="watch"><b>观此：</b>文化产业的增量，越来越来自&quot;科技+内容&quot;的化学反应——沉浸式展演、数字文博、AI辅助创作都在改写文化产品的形态。规划把科技赋能单列，说明文化不再只是内容本身，而是与新技术耦合的新供给。文化消费的盘子，取决于能不能把传统讲出新体验。</div>
+            <p class="src">来源：媒体综合（<a href="https://so.html5.qq.com/page/real/search_news?docid=70000021_0236aadcea522752" target="_blank">so.html5.qq.com</a>）</p>
+            <div class="pageno">— 16 —</div>
+          </div>
+        </div>
+        <div class="face back">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">17</div>
+            <h2 class="news-t">房车消费迎国家层面系统扶持</h2>
+            <p class="news-b">文旅部等十部门出台促进房车消费新措施，这是国家层面首次针对房车全产业链系统部署。文件围绕产品制造、登记管理、交通通行等九大方向施策，破解标准不完善、通行停靠不便等痛点。
+观此：房车在中国长期是小众、粗放的玩法，痛点集中在&quot;能不能合法上路、停在哪&quot;。国家层面细则入局，意味着把这个市场从爱好者圈层推向标准化大众消费。它撬动的不仅是整车销售，还有营地、文旅与周末经济的连带需求。
+来源：媒体综合（https://so.html5.qq.com/page/real/search_news?docid=70000021_0236aadcea522752）</p>
+            <div class="watch"><b>观此：</b>房车在中国长期是小众、粗放的玩法，痛点集中在&quot;能不能合法上路、停在哪&quot;。国家层面细则入局，意味着把这个市场从爱好者圈层推向标准化大众消费。它撬动的不仅是整车销售，还有营地、文旅与周末经济的连带需求。</div>
+            <p class="src">来源：媒体综合（<a href="https://so.html5.qq.com/page/real/search_news?docid=70000021_0236aadcea522752" target="_blank">so.html5.qq.com</a>）</p>
+            <div class="pageno">— 17 —</div>
+          </div>
+        </div>
+      </div>
+      <!-- ===== leaf 10：新闻18 / 新闻19 ===== -->
+      <div class="leaf">
+        <div class="face front">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">18</div>
+            <h2 class="news-t">上召窑秦陵考古：确认战国晚期秦王级墓葬</h2>
+            <p class="news-b">陕西省考古研究院公布上召窑秦陵考古成果，这座位于咸阳市渭城区的墓葬确认为战国晚期秦王级别的墓葬，专家推测墓主可能是秦国华阳太后。
+观此：一座墓葬的级别判定，能补全一段政治亲属关系的拼图。若墓主确为华阳太后，便把文献里模糊的秦国王室脉络，落到了具体的空间与器物上。考古的魅力正在于此——它让史书里几行字，变成可以丈量的真实存在。
+来源：新浪（https://cj.sina.cn/article/norm_detail?url=https%3A%2F%2Ffinance.sina.com.cn%2Fjjxw%2F2026-09-19%2Fdoc-inisifyk9958816.shtml）</p>
+            <div class="watch"><b>观此：</b>一座墓葬的级别判定，能补全一段政治亲属关系的拼图。若墓主确为华阳太后，便把文献里模糊的秦国王室脉络，落到了具体的空间与器物上。考古的魅力正在于此——它让史书里几行字，变成可以丈量的真实存在。</div>
+            <p class="src">来源：新浪（<a href="https://cj.sina.cn/article/norm_detail?url=https%3A%2F%2Ffinance.sina.com.cn%2Fjjxw%2F2026-09-19%2Fdoc-inisifyk9958816.shtml" target="_blank">cj.sina.cn</a>）</p>
+            <div class="pageno">— 18 —</div>
+          </div>
+        </div>
+        <div class="face back">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">19</div>
+            <h2 class="news-t">文博日历里的虎形枕：宋金吉祥纹饰的温度</h2>
+            <p class="news-b">央视联合全国博物馆推出文博科普产品《文博日历》。其中黄褐釉芦雁图虎形枕，是古人夏日纳凉用的瓷质凉枕，枕面绘秋日芦雁图，&quot;雁衔芦&quot;谐音&quot;衔禄&quot;，寄托古人对福禄寿的向往。
+观此：一件瓷枕能讲出两层故事：一是宋金时期的生活美学，二是器物上的吉祥暗语。古人在日用之物上安放愿望，枕面芦雁不只是装饰，更是&quot;鸿雁传情、芦苇安居&quot;的软表达。文博科普的价值，正在于把这种细节重新递回今天的生活。
+来源：新浪（https://cj.sina.cn/article/norm_detail?url=https%3A%2F%2Ffinance.sina.com.cn%2Fjjxw%2F2026-09-19%2Fdoc-inisifyk9958816.shtml）</p>
+            <div class="watch"><b>观此：</b>一件瓷枕能讲出两层故事：一是宋金时期的生活美学，二是器物上的吉祥暗语。古人在日用之物上安放愿望，枕面芦雁不只是装饰，更是&quot;鸿雁传情、芦苇安居&quot;的软表达。文博科普的价值，正在于把这种细节重新递回今天的生活。</div>
+            <p class="src">来源：新浪（<a href="https://cj.sina.cn/article/norm_detail?url=https%3A%2F%2Ffinance.sina.com.cn%2Fjjxw%2F2026-09-19%2Fdoc-inisifyk9958816.shtml" target="_blank">cj.sina.cn</a>）</p>
+            <div class="pageno">— 19 —</div>
+          </div>
+        </div>
+      </div>
+      <!-- ===== leaf 11：新闻20 / 封底 ===== -->
+      <div class="leaf">
+        <div class="face front">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">20</div>
+            <h2 class="news-t">诺贝尔奖奖金上调至1200万瑞典克朗</h2>
+            <p class="news-b">诺贝尔基金会决定，2026年每项诺贝尔奖奖金增加100万瑞典克朗，达到1200万瑞典克朗（约合815万元人民币）。
+观此：奖金上调看似是数字变化，背后是基金会投资规模的支撑与对科学人文价值的再确认。在科研成本攀升的当下，这笔钱既是荣誉的象征，也实打实地缓解获奖者后续研究的资源压力。它传递的态度很朴素：人类仍愿意为最顶尖的智慧付高价。
+来源：新浪（https://cj.sina.cn/article/norm_detail?url=https%3A%2F%2Ffinance.sina.com.cn%2Fjjxw%2F2026-09-19%2Fdoc-inisifyk9958816.shtml）</p>
+            <div class="watch"><b>观此：</b>奖金上调看似是数字变化，背后是基金会投资规模的支撑与对科学人文价值的再确认。在科研成本攀升的当下，这笔钱既是荣誉的象征，也实打实地缓解获奖者后续研究的资源压力。它传递的态度很朴素：人类仍愿意为最顶尖的智慧付高价。</div>
+            <p class="src">来源：新浪（<a href="https://cj.sina.cn/article/norm_detail?url=https%3A%2F%2Ffinance.sina.com.cn%2Fjjxw%2F2026-09-19%2Fdoc-inisifyk9958816.shtml" target="_blank">cj.sina.cn</a>）</p>
+            <div class="pageno">— 20 —</div>
+          </div>
+        </div>
+        <div class="face back back-cover">
+          <div class="pad">
+            <div class="end-big">本期完</div>
+            <div class="end-sub">
+              <span class="disc">纯新闻叙事</span><br>
+              我们坚持纯新闻叙事——只呈现事实<br>
+              与新闻价值，把研究分析留给您自己<br><br>
+              全球重要动态 · 2026-09-19<br>
+              翻动书页，用十分钟把握昨夜今晨的世界
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="nav">
+  <button id="prev" title="上一页（←）">‹</button>
+  <div class="pg" id="pg">1 / 13</div>
+  <button id="next" title="下一页（→）">›</button>
+</div>
+
+<script>
+  const book = document.getElementById('book');
+  const leaves = Array.from(book.querySelectorAll('.leaf'));
+  const N = leaves.length;            // 12 张书页
+  const TOTAL = N + 1;                // 13 个可视跨页（桌面）
+  let flipped = 0;
+  let mobileMode = false;
+  let mobileIndex = 0;
+
+  // 手机单页模式：12 张书页 × 2 面 = 24 个单页
+  const FACES = [];
+  leaves.forEach((lf, i) => {
+    FACES.push({leaf: i, face: 'front'});
+    FACES.push({leaf: i, face: 'back'});
+  });
+
+  function isMobile(){ return window.innerWidth <= 760; }
+
+  function updateDesktop(){
+    leaves.forEach((lf, i) => {
+      lf.style.zIndex = (i < flipped) ? (i + 1) : ((N + 100) - i);
+    });
+    document.getElementById('pg').textContent = (flipped + 1) + ' / ' + TOTAL;
+    document.getElementById('prev').disabled = (flipped <= 0);
+    document.getElementById('next').disabled = (flipped >= N);
+  }
+
+  function updateMobile(){
+    leaves.forEach(lf => lf.classList.remove('mobile-active','show-front','show-back'));
+    const f = FACES[mobileIndex];
+    const lf = leaves[f.leaf];
+    lf.classList.add('mobile-active', f.face === 'front' ? 'show-front' : 'show-back');
+    document.getElementById('pg').textContent = (mobileIndex + 1) + ' / ' + FACES.length;
+    document.getElementById('prev').disabled = (mobileIndex <= 0);
+    document.getElementById('next').disabled = (mobileIndex >= FACES.length - 1);
+  }
+
+  function refresh(){
+    mobileMode = isMobile();
+    const hint = document.getElementById('hint');
+    if(mobileMode){
+      leaves.forEach(lf => { lf.style.transform = ''; lf.style.zIndex = ''; });
+      updateMobile();
+      if(hint) hint.textContent = '📖 点击左右两侧或左右滑动翻页 · 共 ' + FACES.length + ' 页';
+    } else {
+      leaves.forEach(lf => lf.classList.remove('mobile-active','show-front','show-back'));
+      updateDesktop();
+      if(hint) hint.textContent = '📖 点击书页左右两侧 或 使用键盘 ← → 翻页 · 共 ' + TOTAL + ' 张';
+    }
+  }
+
+  function goNext(){
+    if(mobileMode){
+      if(mobileIndex >= FACES.length - 1) return;
+      mobileIndex++;
+      updateMobile();
+    } else {
+      if(flipped >= N) return;
+      const lf = leaves[flipped];
+      lf.style.zIndex = 9999;
+      lf.style.transform = 'rotateY(-180deg)';
+      flipped++;
+      setTimeout(updateDesktop, 920);
+    }
+  }
+
+  function goPrev(){
+    if(mobileMode){
+      if(mobileIndex <= 0) return;
+      mobileIndex--;
+      updateMobile();
+    } else {
+      if(flipped <= 0) return;
+      flipped--;
+      const lf = leaves[flipped];
+      lf.style.zIndex = 9999;
+      lf.style.transform = 'rotateY(0deg)';
+      setTimeout(updateDesktop, 920);
+    }
+  }
+
+  book.addEventListener('click', (e) => {
+    const r = book.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width;
+    if(mobileMode){
+      // 手机：点左侧 30% 上一页，右侧 30% 下一页，中间区域留给点击链接
+      if(x < 0.3) goPrev();
+      else if(x > 0.7) goNext();
+    } else {
+      if(x < 0.5) goPrev(); else goNext();
+    }
+  });
+
+  // 手机触摸滑动翻页
+  let touchStartX = null;
+  book.addEventListener('touchstart', (e) => {
+    touchStartX = e.touches[0].clientX;
+  }, {passive:true});
+  book.addEventListener('touchend', (e) => {
+    if(touchStartX === null) return;
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if(Math.abs(dx) > 50){
+      if(dx < 0) goNext(); else goPrev();
+    }
+    touchStartX = null;
+  }, {passive:true});
+
+  document.getElementById('next').addEventListener('click', (e) => { e.stopPropagation(); goNext(); });
+  document.getElementById('prev').addEventListener('click', (e) => { e.stopPropagation(); goPrev(); });
+  window.addEventListener('keydown', (e) => {
+    if(e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') goNext();
+    if(e.key === 'ArrowLeft' || e.key === 'ArrowUp') goPrev();
+  });
+
+  // 自适应缩放：桌面保持缩放，手机不缩放
+  function fit(){
+    const wrap = document.getElementById('scaleWrap');
+    if(mobileMode){ wrap.style.transform = ''; return; }
+    const avail = window.innerWidth - 24;
+    const s = Math.min(1, avail / (940 + 40));
+    wrap.style.transform = 'scale(' + s + ')';
+  }
+
+  // 支持 URL 直达某页：?page=5（第 5 页），手机和桌面均生效
+  function initFromUrl(){
+    const m = location.search.match(/[?&]page=(\d+)/);
+    if(!m) return;
+    const n = Math.max(1, parseInt(m[1], 10)) - 1;
+    if(mobileMode){
+      mobileIndex = Math.max(0, Math.min(n, FACES.length - 1));
+      updateMobile();
+    } else {
+      flipped = Math.max(0, Math.min(n, N));
+      updateDesktop();
+    }
+  }
+
+  window.addEventListener('resize', () => { refresh(); fit(); });
+
+  refresh();
+  fit();
+  initFromUrl();
+</script>
+</body>
+</html>
