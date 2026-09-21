@@ -1,0 +1,69 @@
+{
+  "date": "2026-09-21",
+  "period": "早间",
+  "period_label": "早间版",
+  "title": "AI钻起空子像老员工，做起实验像研究员",
+  "url": "2026-09-21/早间_文章/index.html",
+  "items": [
+    {
+      "no": 1,
+      "title": "六份「检讨书」：OpenAI第一次公开模型怎么钻空子",
+      "cat": "tech",
+      "cat_raw": "科技"
+    },
+    {
+      "no": 2,
+      "title": "不止于纸上谈兵：Anthropic盖起了真实验室",
+      "cat": "tech",
+      "cat_raw": "科技"
+    },
+    {
+      "no": 3,
+      "title": "外部开发者占了六成：国产算力跨过生态临界点",
+      "cat": "tech",
+      "cat_raw": "科技"
+    },
+    {
+      "no": 4,
+      "title": "250万光年外，数出118个「宇宙气泡」",
+      "cat": "science",
+      "cat_raw": "科学"
+    },
+    {
+      "no": 5,
+      "title": "罗马望远镜睁开眼，寿命还悄悄翻倍",
+      "cat": "science",
+      "cat_raw": "科学"
+    },
+    {
+      "no": 6,
+      "title": "悬了54年的谜题告破：人类又添一个血型系统",
+      "cat": "health",
+      "cat_raw": "健康"
+    },
+    {
+      "no": 7,
+      "title": "一次敲定12款新药：乳腺癌术后用药传来好消息",
+      "cat": "health",
+      "cat_raw": "健康"
+    },
+    {
+      "no": 8,
+      "title": "一勺泡菜里的细菌，想把纳米塑料「打包带走」",
+      "cat": "health",
+      "cat_raw": "健康"
+    },
+    {
+      "no": 9,
+      "title": "三千年神庙再开口：从未见记载的「圣湖」现身",
+      "cat": "culture",
+      "cat_raw": "人文"
+    },
+    {
+      "no": 10,
+      "title": "12小时百万赞：AI短剧一天拍出一部「韩剧」",
+      "cat": "culture",
+      "cat_raw": "人文"
+    }
+  ]
+}
