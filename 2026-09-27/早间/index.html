@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>全球重要动态 · 2026-09-27 早间版（翻页杂志）</title>
+<style>
+  :root{
+    --paper:#f6f1e6;
+    --ink:#211d18;
+    --muted:#7a6f60;
+    --red:#9e1b1b;
+    --rule:#2a2620;
+    --box:#ebe0c8;
+    --boxline:#d8c9a9;
+    --dark1:#1b2330;
+    --dark2:#0e131d;
+    --gold:#c8a24a;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:radial-gradient(1200px 700px at 50% -10%, #34302a 0%, #211e19 55%, #16140f 100%);
+    font-family:"Noto Serif SC","Source Han Serif SC","Songti SC","SimSun",Georgia,serif;
+    color:var(--ink);
+    line-height:1.75;
+    -webkit-font-smoothing:antialiased;
+  }
+  .stage{
+    min-height:100vh;
+    display:flex;flex-direction:column;align-items:center;
+    padding:26px 12px 96px;
+  }
+  .hint{
+    color:#cfc4ad;font-size:13px;letter-spacing:.08em;margin:0 0 18px;opacity:.8;
+  }
+  .scaleWrap{transform-origin:top center;}
+  .book{
+    position:relative;width:940px;height:700px;
+    perspective:2600px;transform-style:preserve-3d;
+    filter:drop-shadow(0 24px 50px rgba(0,0,0,.55));
+  }
+  .leaf{
+    position:absolute;top:0;left:470px;width:470px;height:700px;
+    transform-origin:left center;transform-style:preserve-3d;
+    transform:rotateY(0deg);
+    transition:transform .9s cubic-bezier(.55,.08,.2,1);
+  }
+  .face{
+    position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;
+    border:1px solid #cabd9f;overflow:hidden;
+    display:flex;flex-direction:column;
+  }
+  .front{transform:rotateY(0deg);background:var(--paper);}
+  .back{transform:rotateY(180deg);background:var(--paper);}
+  .pad{padding:30px 28px;flex:1;display:flex;flex-direction:column;}
+
+  .folio{font-size:11px;letter-spacing:.22em;color:var(--muted);text-transform:uppercase;
+    border-bottom:1px solid var(--boxline);padding-bottom:7px;margin-bottom:14px;}
+
+  /* 新闻页 */
+  .news-no{font-size:44px;font-weight:700;color:var(--red);line-height:.85;font-variant-numeric:tabular-nums;}
+  .news-t{font-size:21px;font-weight:700;line-height:1.35;margin:10px 0 14px;}
+  .news-b{font-size:14.5px;line-height:1.85;text-align:justify;margin:0 0 14px;flex:1;}
+  .watch{background:var(--box);border-left:4px solid var(--red);padding:9px 12px;font-size:13px;line-height:1.7;margin:0 0 10px;}
+  .watch b{color:var(--red);margin-right:3px;}
+  .src{font-size:12px;color:var(--muted);line-height:1.6;}
+  .src a{color:#3a5e8c;text-decoration:none;border-bottom:1px dotted #3a5e8c;word-break:break-all;}
+  .src a:hover{color:var(--red);}
+  .pageno{text-align:center;font-size:11px;color:var(--muted);letter-spacing:.35em;margin-top:10px;}
+
+  /* 卷首 / 目录 / 封底 */
+  .sec-h{font-size:25px;font-weight:700;margin:4px 0 16px;border-bottom:2px solid var(--rule);padding-bottom:9px;}
+  .lead-p{font-size:15px;line-height:1.95;text-align:justify;margin:0 0 14px;}
+  .lead-note{font-size:13.5px;line-height:1.9;color:#3a342b;background:var(--box);padding:12px 14px;border-left:4px solid var(--red);}
+  .toc{columns:2;column-gap:22px;font-size:11.5px;line-height:1.35;padding-left:18px;margin:0;}
+  .toc li{margin-bottom:5px;break-inside:avoid;}
+  .toc li::marker{color:var(--red);font-weight:700;font-variant-numeric:tabular-nums;}
+  .toc li span{display:none;}
+  .contents-pad{padding:18px 22px 32px;}
+  .contents-pad .folio{margin-bottom:6px;}
+  .contents-pad .sec-h{margin:0 0 6px;padding-bottom:6px;}
+  .contents-pad .pageno{margin-top:2px;}
+  .disc{color:var(--red);font-weight:700;}
+  .end-box{border:1px solid var(--boxline);padding:14px;font-size:13px;line-height:1.85;background:var(--box);}
+
+  /* 封面 */
+  .cover{
+    background:
+      radial-gradient(700px 500px at 50% 18%, rgba(60,80,120,.35), transparent 60%),
+      linear-gradient(160deg,#202a3b 0%, #131a26 55%, #0c111a 100%);
+    color:#f1e9d6;border-color:#3a455c;
+  }
+  .cover-in{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:34px;}
+  .cover-top{font-size:12px;letter-spacing:.5em;color:var(--gold);text-transform:uppercase;margin-bottom:26px;}
+  .cover-title{font-size:62px;font-weight:700;letter-spacing:.14em;line-height:1.15;margin:0;
+    text-shadow:0 2px 18px rgba(200,162,74,.35);}
+  .cover-rule{width:120px;height:2px;background:var(--gold);margin:26px 0 20px;opacity:.8;}
+  .cover-sub{font-size:15px;letter-spacing:.32em;color:#d9cfb6;}
+  .cover-foot{position:absolute;bottom:30px;left:0;right:0;text-align:center;
+    font-size:12px;letter-spacing:.18em;color:#b8ad94;}
+
+  /* 封底 */
+  .back-cover{
+    background:linear-gradient(160deg,#202a3b 0%, #131a26 100%);
+    color:#f1e9d6;border-color:#3a455c;
+  }
+  .back-cover .pad{align-items:center;justify-content:center;text-align:center;}
+  .back-cover .end-big{font-size:40px;font-weight:700;letter-spacing:.2em;color:#f1e9d6;margin:0 0 18px;}
+  .back-cover .end-sub{font-size:13px;letter-spacing:.18em;color:#b8ad94;line-height:2;}
+
+  /* 导航（透明浮层，不遮挡正文） */
+  .nav{position:fixed;bottom:0;left:0;right:0;height:62px;background:rgba(18,16,13,.48);
+    display:flex;align-items:center;justify-content:center;gap:22px;z-index:60;
+    border-top:1px solid rgba(200,162,74,.18);backdrop-filter:blur(8px);pointer-events:none;}
+  .nav button{pointer-events:auto;background:transparent;border:1px solid rgba(200,162,74,.55);color:#e8e0cf;
+    font-size:22px;width:46px;height:38px;border-radius:8px;cursor:pointer;
+    font-family:inherit;transition:.2s;display:flex;align-items:center;justify-content:center;}
+  .nav button:hover{background:rgba(200,162,74,.25);border-color:var(--gold);}
+  .nav button:disabled{opacity:.35;cursor:default;}
+  .nav .pg{color:#f5efe3;font-size:14px;letter-spacing:.12em;min-width:96px;text-align:center;
+    text-shadow:0 1px 4px rgba(0,0,0,.55);}
+
+  @media (max-width:760px){
+    .hint{
+      position:fixed;top:0;left:0;right:0;z-index:70;
+      font-size:12px;margin:0;padding:10px 14px;
+      background:rgba(18,16,13,.60);color:#cfc4ad;
+      text-align:center;letter-spacing:.04em;
+      backdrop-filter:blur(6px);border-bottom:1px solid rgba(200,162,74,.2);
+    }
+    .stage{
+      position:fixed;inset:0;padding:0;display:block;overflow:hidden;
+      background:radial-gradient(1200px 700px at 50% -10%, #34302a 0%, #211e19 55%, #16140f 100%);
+    }
+    .scaleWrap{transform:none !important;width:100vw;height:100vh;}
+    .book{
+      position:absolute;inset:0;width:100vw;height:100vh;
+      perspective:none;transform-style:flat;filter:none;
+    }
+    .leaf{
+      position:absolute;inset:0;width:100vw;height:100vh;left:0 !important;
+      opacity:0;pointer-events:none;z-index:0;
+      transform:none !important;transition:opacity .35s ease;
+    }
+    .leaf.mobile-active{opacity:1;pointer-events:auto;z-index:10;}
+    .leaf .face{display:none !important;position:absolute;inset:0;width:100%;height:100%;
+      transform:none !important;backface-visibility:visible;border:none;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+    .leaf.show-front .front{display:flex !important;}
+    .leaf.show-back .back{display:flex !important;}
+    .pad{padding:64px 22px 150px;}
+
+    .cover-in{padding:70px 26px 26px;}
+    .cover-top{font-size:13px;margin-bottom:22px;}
+    .cover-title{font-size:52px;}
+    .cover-sub{font-size:16px;letter-spacing:.22em;}
+    .cover-foot{bottom:110px;font-size:13px;}
+
+    .sec-h{font-size:28px;}
+    .lead-p{font-size:17px;line-height:2;}
+    .lead-note{font-size:15px;}
+    .toc{columns:2;column-gap:14px;padding-left:16px;font-size:11.5px;line-height:1.25;}
+    .toc li{margin-bottom:4px;break-inside:avoid;}
+    .toc li::marker{font-size:11.5px;}
+    .contents-pad{padding:64px 16px 170px;}
+    .contents-pad .folio{margin-bottom:4px;}
+    .contents-pad .sec-h{font-size:22px;margin:0 0 8px;padding-bottom:6px;}
+    .contents-pad .pageno{margin-top:auto;padding-top:10px;}
+
+    .news-no{font-size:58px;}
+    .news-t{font-size:25px;line-height:1.4;margin:12px 0 16px;}
+    .news-b{font-size:16px;line-height:2;}
+    .watch{font-size:14.5px;line-height:1.85;padding:12px 14px;}
+    .src{font-size:13px;line-height:1.75;}
+
+    .back-cover .end-big{font-size:48px;}
+    .back-cover .end-sub{font-size:15px;line-height:2.2;}
+
+    .nav{height:58px;gap:18px;}
+    .nav button{width:50px;height:40px;font-size:24px;}
+    .nav .pg{font-size:14px;min-width:76px;}
+  }
+</style>
+</head>
+<body>
+<div class="stage">
+  <p class="hint" id="hint">📖 点击书页左右两侧 或 使用键盘 ← → 翻页</p>
+  <div class="scaleWrap" id="scaleWrap">
+    <div class="book" id="book">
+
+      <!-- ===== leaf 0：封面 / 卷首语 ===== -->
+      <div class="leaf">
+        <div class="face front cover">
+          <div class="cover-in">
+            <div class="cover-top">Global Daily Brief</div>
+            <h1 class="cover-title">全球<br>重要动态</h1>
+            <div class="cover-rule"></div>
+            <div class="cover-sub">一日廿事 · 纯新闻叙述</div>
+            <div class="cover-foot">2026 年 9 月 27 日　星期日 · 早间版</div>
+          </div>
+        </div>
+        <div class="face back">
+          <div class="pad">
+            <div class="folio">卷首语 · Foreword</div>
+            <h2 class="sec-h">致读者</h2>
+            <p class="lead-p">一觉醒来，世界又发生了哪些大事？本期为您精选 <b>10 条</b> 值得关注的全球动态，覆盖 AI 与算力、科学发现、航天探索、健康医药、环境气候与人文艺术。</p>
+            <p class="lead-p">我们坚持<b>纯新闻叙事</b>——只呈现事实与新闻价值，把研究分析留给您自己。翻动书页，用十分钟把握昨夜今晨的世界。</p>
+            <div class="lead-note">本期聚焦：太空算力与AI物理</div>
+            <div class="pageno">— 卷首 —</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== leaf 1：目录 / 新闻01 ===== -->
+      <div class="leaf">
+        <div class="face front">
+          <div class="pad contents-pad">
+            <div class="folio">目录 · Contents</div>
+            <h2 class="sec-h">本期目录</h2>
+            <ol class="toc">
+              <li>1. 四颗芯片上天赶考，谷歌太空数据中心迈出第一步</li>
+              <li>2. AI一口气推完粒子物理九圈，教授亲手验算</li>
+              <li>3. 会看视频还会剪辑，多模态智能体开始抢活干</li>
+              <li>4. 量子计算机里，物质「凭空出现」</li>
+              <li>5. 首单商业卫星救援宣告失败，机器人航天器坠入大气层</li>
+              <li>6. 3.74亿吨：一笔算到全球头顶的减碳账</li>
+              <li>7. 让肌肉不再变成骨头，一款口服新药获批</li>
+              <li>8. 拦住抗癌大军的黑手，原来藏在淋巴结里</li>
+              <li>9. 一座神庙两条圣湖，中国考古队刷新三千年认知</li>
+              <li>10. 五百平方公里普查完毕，东江边藏着一百七十个远古村落</li>
+            </ol>
+            <div class="pageno">— 目录 —</div>
+          </div>
+        </div>
+        <div class="face back">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">01</div>
+            <h2 class="news-t">1. 四颗芯片上天赶考，谷歌太空数据中心迈出第一步</h2>
+            <p class="news-b">9月24日，谷歌宣布「太阳捕手」计划首颗原型卫星定档10月1日，搭乘SpaceX猎鹰9号火箭升空。这颗与Planet公司合作的卫星携带四颗自研TPU芯片，将在近地轨道测试AI芯片能否承受发射冲击、太空辐射与真空散热三重考验，芯片局部需扛住50至100G的加速度载荷。</p>
+            <div class="watch"><b>观此：</b>这一步的意义在于「从纸面到轨道」。谷歌此前已在地面做完功课：质子束辐照显示TPU耐辐射能力超过五年任务预期，热真空舱测试也已完成，但原型星上的散热方案只够芯片连续运行约15分钟。谷歌的长期设想是让数十颗卫星组成用激光互联的算力集群——轨道太阳能发电效率理论上可达地面的约8倍，这是整盘棋的诱饵。2027年还有双星激光组网试验，真正建成太空数据中心仍有很长的路，但方向已经从设想变成了排期表。</div>
+            <p class="src">来源：央视财经（<a href="https://finance.sina.com.cn/roll/2026-09-26/doc-initcyyv6980818.shtml" target="_blank">finance.sina.com.cn</a>）</p>
+            <div class="pageno">— 01 —</div>
+          </div>
+        </div>
+      </div>
+      <!-- ===== leaf 2：新闻02 / 新闻03 ===== -->
+      <div class="leaf">
+        <div class="face front">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">02</div>
+            <h2 class="news-t">2. AI一口气推完粒子物理九圈，教授亲手验算</h2>
+            <p class="news-b">9月26日，AI圈流传一则消息：Claude在一次任务中完成了粒子物理领域连续九圈的微扰计算，斯坦福SLAC实验室的教授独立复核后确认结果无误。这类计算过去需要研究生耗费数周反复推导，如今由模型一次完成。</p>
+            <div class="watch"><b>观此：</b>这件小事的分量在于「可信」二字。AI做数学题不稀奇，稀奇的是物理学家愿意花时间逐行验算并签字背书——这意味着模型的推导过程已经严谨到能进入专业工作流。科学计算里大量「脏活累活」正是这类多圈展开：机械、重复、极易出错，却要求绝对精确。如果AI能稳定接住这一层，科研的瓶颈将更多从「算得动」转移到「问得好」。上一次人类把计算外包给机器，是算盘换成计算机；这一次，外包的是推导本身。</div>
+            <p class="src">来源：AITOP日报（<a href="https://aitop.news/daily" target="_blank">aitop.news</a>）</p>
+            <div class="pageno">— 02 —</div>
+          </div>
+        </div>
+        <div class="face back">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">03</div>
+            <h2 class="news-t">3. 会看视频还会剪辑，多模态智能体开始抢活干</h2>
+            <p class="news-b">9月26日，Qwen团队发布多模态智能体模型Qwen3.8-Omni-Flash，采用稀疏MoE架构，上下文长度达100万token，能直接完成视频剪辑与长音频翻译，并配套开源两个多模态应用框架。同期开源社区动作密集：Docker联合Linux基金会把沙箱工具推为开放标准，谷歌也开源了智能体编排运行时。</p>
+            <div class="watch"><b>观此：</b>多模态模型不新鲜，新鲜的是「智能体化」——模型不再只回答问题，而是直接动手干活：剪片子、翻字幕、调度工具链。百万token上下文意味着一部两小时的电影可以整部喂进去，这在两年前还是奢望。基础设施同步开源也值得留意，编排、沙箱、训练环境正在被一件件搬进公共标准，智能体生态的地基比模型本身长得更快。对普通用户来说，最直观的变化可能是：以后让AI「帮我把这段视频剪出高光」，它是真的会交活回来。</div>
+            <p class="src">来源：AITOP日报（<a href="https://aitop.news/daily" target="_blank">aitop.news</a>）</p>
+            <div class="pageno">— 03 —</div>
+          </div>
+        </div>
+      </div>
+      <!-- ===== leaf 3：新闻04 / 新闻05 ===== -->
+      <div class="leaf">
+        <div class="face front">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">04</div>
+            <h2 class="news-t">4. 量子计算机里，物质「凭空出现」</h2>
+            <p class="news-b">9月26日，杜克大学团队在《自然·物理》发表成果：研究者在离子阱量子模拟器中实时观测到「弦断裂」的完整过程——高能状态下真空中凭空产生一对物质粒子，并被一根能量弦连接；弦被拉断的瞬间，新的粒子对随之诞生。这正是早期宇宙粒子创生过程的微缩模型。</p>
+            <div class="watch"><b>观此：</b>「无中生有」听起来像玄学，但在量子场论里，真空从来不空，只是平时没有能量去唤醒它。过去检验这类理论只能靠纸上推导和超级计算机近似，如今一百多个原子被精确操控，让教科书里的方程在实验室里逐帧重演。这类模拟器还不能通算一切，但它选对了战场：专攻经典计算机算不动的极端情形。理解宇宙最初一瞬物质如何涌现，正是从这里一寸一寸铺开的。</div>
+            <p class="src">来源：ScienceDaily（<a href="https://www.sciencedaily.com/releases/2026/09/260925005416.htm" target="_blank">sciencedaily.com</a>）</p>
+            <div class="pageno">— 04 —</div>
+          </div>
+        </div>
+        <div class="face back">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">05</div>
+            <h2 class="news-t">5. 首单商业卫星救援宣告失败，机器人航天器坠入大气层</h2>
+            <p class="news-b">9月25日，美国凯塔利斯特公司确认，其机器人航天器LINK未能完成抬升NASA「雨燕」天文台轨道的任务，当天脱离轨道再入大气层。LINK今年7月3日发射，入轨后电子故障接连出现，两台反作用轮失效导致航天器一度每秒旋转约9度；8月19日双方正式终止救援，LINK在轨共85天，任务耗资约3000万美元。</p>
+            <div class="watch"><b>观此：</b>失败本身是重要数据。「雨燕」天文台服役已超二十年、设计寿命只有两年，又没有推进系统，这次本是人类首次尝试为无维护设计的政府卫星做在轨续命。任务虽然没有成功，但团队临终前仍让LINK逼近到距「雨燕」12至15公里处完成了拍照测试，三条机械臂的数据全部带回。太空经济讨论了多年「一次性卫星」何时变成「可维修卫星」，这次的答案是：还差得远，但剧本已经排练过一遍了。</div>
+            <p class="src">来源：财联社（<a href="https://www.163.com/dy/article/L7OCTRMR05198CJN.html" target="_blank">163.com</a>）</p>
+            <div class="pageno">— 05 —</div>
+          </div>
+        </div>
+      </div>
+      <!-- ===== leaf 4：新闻06 / 新闻07 ===== -->
+      <div class="leaf">
+        <div class="face front">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">06</div>
+            <h2 class="news-t">6. 3.74亿吨：一笔算到全球头顶的减碳账</h2>
+            <p class="news-b">9月26日，参考消息援引路透社报道：位于赫尔辛基的能源与清洁空气研究中心测算，中国去年出口的电池、风机、电动汽车与光伏板，在使用周期内合计可减排3.74亿吨二氧化碳——超过英国全年的碳排放总量；2025年出口清洁技术全生命周期减排预计达69亿吨，较2024年增长31%。</p>
+            <div class="watch"><b>观此：</b>气候议题过去习惯按国界算账，这笔测算换了一个算法：看装备流向哪里、在哪里替代化石能源。最典型的战场是南亚——巴基斯坦的光伏装机热潮几乎全部由中国面板撑起，其光伏发电占比已位居全球前列。五年前很少有人预料到，太阳能与电动车会在新兴市场以这样的速度铺开，供给放量与两次化石能源价格冲击共同完成了这次推动。全球脱碳的进度条，越来越取决于制造与出口的规模效应，这可能是比任何谈判文件都更硬的变量。</div>
+            <p class="src">来源：参考消息（<a href="https://www.163.com/dy/article/L7OAH65S0514BQ68.html" target="_blank">163.com</a>）</p>
+            <div class="pageno">— 06 —</div>
+          </div>
+        </div>
+        <div class="face back">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">07</div>
+            <h2 class="news-t">7. 让肌肉不再变成骨头，一款口服新药获批</h2>
+            <p class="news-b">9月25日，美国FDA批准口服药物Atebrioz（zilurgisertib）上市，用于减少12岁及以上进行性骨化性纤维发育不良（FOP）患者的新发异位骨化。FOP是超罕见遗传病，患者的肌肉、肌腱会逐渐变成骨头，全球患者约900人。临床试验中，用药组新发骨化病灶总体积较安慰剂组降低超过99%，效果持续至第48周。</p>
+            <div class="watch"><b>观此：</b>FOP常被称作「石头人综合征」——身体一点点「石化」，连掰直手指都可能催生新骨。这款药的思路是釜底抽薪：绝大多数患者体内ALK2受体异常活化，正是异位成骨的开关，药物直接把它按住。数字同样值得琢磨：主要终点的统计学表现并不漂亮，但影像学指标压倒性一致，最终说服监管层的正是这组近100%的体积差。对超罕见病而言，「全世界只有900个病人」的药也能做成，这是孤儿药制度存在的全部意义。</div>
+            <p class="src">来源：药明康德（<a href="https://field.10jqka.com.cn/20260926/c680285863.shtml" target="_blank">field.10jqka.com.cn</a>）</p>
+            <div class="pageno">— 07 —</div>
+          </div>
+        </div>
+      </div>
+      <!-- ===== leaf 5：新闻08 / 新闻09 ===== -->
+      <div class="leaf">
+        <div class="face front">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">08</div>
+            <h2 class="news-t">8. 拦住抗癌大军的黑手，原来藏在淋巴结里</h2>
+            <p class="news-b">9月26日《自然》报道：科学家首次确认分泌型磷脂酶PLA2G2D是一种全新的免疫检查点，它由肿瘤引流淋巴结中的特定巨噬细胞分泌，直接抑制早期激活的T细胞增殖。对黑色素瘤患者的870277个单细胞原位图谱显示，远端复发患者淋巴结中该分子显著上调；阻断它与PD-1抑制剂联用，在小鼠中展现出显著协同抗癌效果。</p>
+            <div class="watch"><b>观此：</b>免疫治疗的火力过去几乎全部砸向肿瘤微环境，但这篇研究把镜头拉回了「新兵训练营」——T细胞第一次被激活的淋巴结。训练场里就站着「教官」，把还没上场的T细胞按住不动，这解释了为什么部分患者对PD-1类药物响应不佳。更巧妙的是，PLA2G2D的抑制作用大部分独立于其酶活性，意味着药物设计可以绕开传统酶抑制的老路。检查点家族二十年没添过几个新成员，这一次把战线从肿瘤内部推回到了免疫系统的源头。</div>
+            <p class="src">来源：奇点网（<a href="https://www.163.com/dy/article/L7P711M4051182D7.html" target="_blank">163.com</a>）</p>
+            <div class="pageno">— 08 —</div>
+          </div>
+        </div>
+        <div class="face back">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">09</div>
+            <h2 class="news-t">9. 一座神庙两条圣湖，中国考古队刷新三千年认知</h2>
+            <p class="news-b">9月24日，国家文物局发布中外联合考古进展：中埃联合考古队确认，卢克索孟图神庙区存在此前完全未知的南部圣湖。截至2026年，联合队已发掘神庙区约2300平方米，首次在同一神庙区内发现南北双圣湖并立的格局——这在两百多年埃及学研究史与现存埃及文献中均无记载。发掘同时完整揭露了第二至五座奥西里斯小神殿，出土数十件雕像。</p>
+            <div class="watch"><b>观此：</b>圣湖是埃及神庙仪式用水的核心，学界的默认设定是「一庙一湖」，双圣湖意味着整个祭祀体系的运作方式可能被重新想象。耐人寻味的是线索藏在「废料」里：圣湖石构件中大量再利用石块带着铭文与雕像，成为断代的关键证据。这片神庙区共有六座奥西里斯神殿，集中兴建于古埃及渐趋衰落的第25、26王朝——在一个国力下行的时代，人们把更多神殿献给象征重生的奥西里斯。石头不会说话，但排布方式本身就是历史。</div>
+            <p class="src">来源：新华社（<a href="https://www.toutiao.com/article/7689379855082717731/" target="_blank">toutiao.com</a>）</p>
+            <div class="pageno">— 09 —</div>
+          </div>
+        </div>
+      </div>
+      <!-- ===== leaf 6：新闻10 / 封底 ===== -->
+      <div class="leaf">
+        <div class="face front">
+          <div class="pad">
+            <div class="folio">全球重要动态 · 早间版</div>
+            <div class="news-no">10</div>
+            <h2 class="news-t">10. 五百平方公里普查完毕，东江边藏着一百七十个远古村落</h2>
+            <p class="news-b">9月26日，广东惠州公布先秦时期聚落考古中期成果：一年多来，考古团队在博罗县完成500余平方公里系统调查，新发现先秦时期遗址170余处，并对罗阳遗址石龙头地点实施抢救性发掘，出土陶器、原始瓷器、青铜器、铁器乃至陶塑人像，成果已同步向公众展示。</p>
+            <div class="watch"><b>观此：</b>170余处是什么概念？相当于平均每三平方公里就发现一处先秦遗存，东江流域在岭南早期文明版图上的密度被整体刷新。更值得关注的是方法论：不是发现一件宝贝，而是摸清一整片聚落群「谁挨着谁、谁大谁小」——这正是从「挖宝」走向「复原古代社会」的当代考古路径。岭南先秦史的书面记载近乎空白，这幅用脚走出来的聚落地图，未来会成为珠江流域文明叙事的底稿。</div>
+            <p class="src">来源：南方都市报（<a href="https://www.163.com/dy/article/L7P7I5QI05129QAF.html" target="_blank">163.com</a>）</p>
+            <div class="pageno">— 10 —</div>
+          </div>
+        </div>
+        <div class="face back back-cover">
+          <div class="pad">
+            <div class="end-big">本期完</div>
+            <div class="end-sub">
+              <span class="disc">纯新闻叙事</span><br>
+              我们坚持纯新闻叙事——只呈现事实<br>
+              与新闻价值，把研究分析留给您自己<br><br>
+              全球重要动态 · 2026-09-27<br>
+              翻动书页，用十分钟把握昨夜今晨的世界
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="nav">
+  <button id="prev" title="上一页（←）">‹</button>
+  <div class="pg" id="pg">1 / 8</div>
+  <button id="next" title="下一页（→）">›</button>
+</div>
+
+<script>
+  const book = document.getElementById('book');
+  const leaves = Array.from(book.querySelectorAll('.leaf'));
+  const N = leaves.length;            // 书页数（随条数变化）
+  const TOTAL = N + 1;                // 可视跨页数（桌面）= 书页数 + 1
+  let flipped = 0;
+  let mobileMode = false;
+  let mobileIndex = 0;
+
+  // 手机单页模式：书页数 × 2 面
+  const FACES = [];
+  leaves.forEach((lf, i) => {
+    FACES.push({leaf: i, face: 'front'});
+    FACES.push({leaf: i, face: 'back'});
+  });
+
+  function isMobile(){ return window.innerWidth <= 760; }
+
+  function updateDesktop(){
+    leaves.forEach((lf, i) => {
+      lf.style.zIndex = (i < flipped) ? (i + 1) : ((N + 100) - i);
+    });
+    document.getElementById('pg').textContent = (flipped + 1) + ' / ' + TOTAL;
+    document.getElementById('prev').disabled = (flipped <= 0);
+    document.getElementById('next').disabled = (flipped >= N);
+  }
+
+  function updateMobile(){
+    leaves.forEach(lf => lf.classList.remove('mobile-active','show-front','show-back'));
+    const f = FACES[mobileIndex];
+    const lf = leaves[f.leaf];
+    lf.classList.add('mobile-active', f.face === 'front' ? 'show-front' : 'show-back');
+    document.getElementById('pg').textContent = (mobileIndex + 1) + ' / ' + FACES.length;
+    document.getElementById('prev').disabled = (mobileIndex <= 0);
+    document.getElementById('next').disabled = (mobileIndex >= FACES.length - 1);
+  }
+
+  function refresh(){
+    mobileMode = isMobile();
+    const hint = document.getElementById('hint');
+    if(mobileMode){
+      leaves.forEach(lf => { lf.style.transform = ''; lf.style.zIndex = ''; });
+      updateMobile();
+      if(hint) hint.textContent = '📖 点击左右两侧或左右滑动翻页 · 共 ' + FACES.length + ' 页';
+    } else {
+      leaves.forEach(lf => lf.classList.remove('mobile-active','show-front','show-back'));
+      updateDesktop();
+      if(hint) hint.textContent = '📖 点击书页左右两侧 或 使用键盘 ← → 翻页 · 共 ' + TOTAL + ' 张';
+    }
+  }
+
+  function goNext(){
+    if(mobileMode){
+      if(mobileIndex >= FACES.length - 1) return;
+      mobileIndex++;
+      updateMobile();
+    } else {
+      if(flipped >= N) return;
+      const lf = leaves[flipped];
+      lf.style.zIndex = 9999;
+      lf.style.transform = 'rotateY(-180deg)';
+      flipped++;
+      setTimeout(updateDesktop, 920);
+    }
+  }
+
+  function goPrev(){
+    if(mobileMode){
+      if(mobileIndex <= 0) return;
+      mobileIndex--;
+      updateMobile();
+    } else {
+      if(flipped <= 0) return;
+      flipped--;
+      const lf = leaves[flipped];
+      lf.style.zIndex = 9999;
+      lf.style.transform = 'rotateY(0deg)';
+      setTimeout(updateDesktop, 920);
+    }
+  }
+
+  book.addEventListener('click', (e) => {
+    const r = book.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width;
+    if(mobileMode){
+      // 手机：点左侧 30% 上一页，右侧 30% 下一页，中间区域留给点击链接
+      if(x < 0.3) goPrev();
+      else if(x > 0.7) goNext();
+    } else {
+      if(x < 0.5) goPrev(); else goNext();
+    }
+  });
+
+  // 手机触摸滑动翻页
+  let touchStartX = null;
+  book.addEventListener('touchstart', (e) => {
+    touchStartX = e.touches[0].clientX;
+  }, {passive:true});
+  book.addEventListener('touchend', (e) => {
+    if(touchStartX === null) return;
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if(Math.abs(dx) > 50){
+      if(dx < 0) goNext(); else goPrev();
+    }
+    touchStartX = null;
+  }, {passive:true});
+
+  document.getElementById('next').addEventListener('click', (e) => { e.stopPropagation(); goNext(); });
+  document.getElementById('prev').addEventListener('click', (e) => { e.stopPropagation(); goPrev(); });
+  window.addEventListener('keydown', (e) => {
+    if(e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') goNext();
+    if(e.key === 'ArrowLeft' || e.key === 'ArrowUp') goPrev();
+  });
+
+  // 自适应缩放：桌面保持缩放，手机不缩放
+  function fit(){
+    const wrap = document.getElementById('scaleWrap');
+    if(mobileMode){ wrap.style.transform = ''; return; }
+    const avail = window.innerWidth - 24;
+    const s = Math.min(1, avail / (940 + 40));
+    wrap.style.transform = 'scale(' + s + ')';
+  }
+
+  // 支持 URL 直达某页：?page=5（第 5 页），手机和桌面均生效
+  function initFromUrl(){
+    const m = location.search.match(/[?&]page=(\d+)/);
+    if(!m) return;
+    const n = Math.max(1, parseInt(m[1], 10)) - 1;
+    if(mobileMode){
+      mobileIndex = Math.max(0, Math.min(n, FACES.length - 1));
+      updateMobile();
+    } else {
+      flipped = Math.max(0, Math.min(n, N));
+      updateDesktop();
+    }
+  }
+
+  window.addEventListener('resize', () => { refresh(); fit(); });
+
+  refresh();
+  fit();
+  initFromUrl();
+</script>
+</body>
+</html>
